@@ -1,0 +1,52 @@
+/* Design tokens — verbatim from the Claude Design bundle README ("Design Tokens").
+   Single source of truth for the preview's look; mirror the bundle, don't invent. */
+:root {
+  --font-display: "Libre Caslon Text", Georgia, serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, Menlo, monospace;
+  --font-ui: -apple-system, Helvetica, Arial, sans-serif;
+
+  /* surfaces */
+  --bg: radial-gradient(130% 90% at 50% 0%, #f3ebdd 0%, #e4d8c6 60%, #c9b79e 100%);
+  --card: #fffdf9;
+  --card-alt: #f5f6f9;
+  --border: #e6dcc9;
+  --shadow: 0 10px 26px rgba(80, 55, 35, 0.1);
+  --shadow-hover: 0 18px 38px rgba(80, 55, 35, 0.18);
+  --shadow-widget: 0 22px 50px rgba(20, 20, 45, 0.34);
+
+  /* ink */
+  --ink: #3a2f28;
+  --ink-2: #6e5f50;
+  --ink-3: #7a6a5a;
+  --eyebrow: #927e63;
+
+  /* agent accents */
+  --a-red: #c75c49;
+  --a-blue: #5a93c8;
+  --a-green: #5fa57e;
+  --a-amber: #d2a23e;
+  --a-purple: #9a78c8;
+  --a-plum: #7a5c84;
+  --a-slate: #4a5163;
+  --a-orange: #be6f44;
+
+  /* status */
+  --st-done: #5fa552;
+  --st-wait: #d9a23e;
+  --st-queued: #c2c6ce;
+  --st-error: #e0604f;
+
+  /* live-reaction tiers (5-hour window) */
+  --t-content: #5fa552;
+  --t-watchful: #a6b048;
+  --t-busy: #e2b458;
+  --t-antsy: #e08a36;
+  --t-meltdown: #d2473a;
+
+  /* skin / character */
+  --skin: #ebc9a4;
+  --skin-shade: #d89a6e;
+  --hair: #d8d2c8;
+  --line: #6b4a35;
+  --cheek: rgba(206, 74, 56, 0.32);
+}

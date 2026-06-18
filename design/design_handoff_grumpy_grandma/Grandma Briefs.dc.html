@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous">
+  <link href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Text:ital,wght@0,400;0,700;1,400&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
+  <style>
+    html, body { margin: 0; padding: 0; background: #E7E2DA; }
+    @keyframes br-blink { 0%, 92%, 100% { transform: scaleY(1); } 96% { transform: scaleY(0.12); } }
+    @keyframes br-breathe { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-3px); } }
+    @keyframes br-throb { 0%, 100% { box-shadow: 0 0 0 0 rgba(178,58,46,0); } 50% { box-shadow: 0 0 0 4px rgba(178,58,46,0.16); } }
+  </style>
+</helmet>
+
+<div style="min-height: 100vh; background: radial-gradient(130% 90% at 50% 0%, #F3EBDD, #E4D8C6 62%, #C9B79E); font-family: Helvetica, Arial, sans-serif; color: #3A2F28; padding: 40px 30px 80px;">
+
+  <div style="max-width: 1040px; margin: 0 auto;">
+
+    <!-- header -->
+    <div style="display: flex; align-items: flex-end; justify-content: space-between; gap: 18px; margin-bottom: 18px;">
+      <div>
+        <div style="font-size: 11px; letter-spacing: 2.6px; text-transform: uppercase; color: #927E63; margin-bottom: 7px;">Grumpy Grandma · Decisions</div>
+        <h1 style="margin: 0; font-family: 'Libre Caslon Text', serif; font-size: 30px; font-weight: 700; letter-spacing: -0.5px;">Decision Briefs</h1>
+        <p style="margin: 6px 0 0; font-size: 13.5px; color: #6E5F50; max-width: 520px; line-height: 1.5;">Claude has paused and needs a call from you. The longer a brief sits, the crosser she gets.</p>
+      </div>
+    </div>
+
+    <!-- §5.5 PROJECT SWITCHER (shared) -->
+    <div style="display: flex; align-items: center; gap: 9px; flex-wrap: wrap; margin-bottom: 20px;">
+      <span style="font-size: 11px; letter-spacing: 1.4px; text-transform: uppercase; color: #9A876D; margin-right: 2px;">Project</span>
+      <sc-for list="{{ projects }}" as="p" hint-placeholder-count="5">
+        <div onClick="{{ p.pick }}" style="cursor: pointer; display: flex; align-items: center; gap: 7px; padding: 7px 13px; border-radius: 20px; font-size: 12.5px; font-weight: 600; background: {{ p.bg }}; color: {{ p.fg }}; border: 1.5px solid {{ p.bd }}; transition: all .14s;">
+          <span style="width: 7px; height: 7px; border-radius: 50%; background: {{ p.dot }};"></span>{{ p.label }}<span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; opacity: 0.7;">{{ p.count }}</span>
+        </div>
+      </sc-for>
+    </div>
+
+    <!-- body: queue + grandma panel -->
+    <div style="display: grid; grid-template-columns: 1fr 280px; gap: 22px; align-items: start;">
+
+      <!-- QUEUE -->
+      <div style="display: flex; flex-direction: column; gap: 14px;">
+        <sc-for list="{{ briefs }}" as="b" hint-placeholder-count="3">
+          <div style="position: relative; background: #FFFDF9; border: 1px solid #E6DCC9; border-radius: 16px; padding: 16px 18px 16px 22px; box-shadow: 0 8px 22px rgba(80,55,35,0.09); overflow: hidden; opacity: {{ b.op }}; transition: opacity .25s;">
+            <div style="position: absolute; left: 0; top: 0; bottom: 0; width: 6px; background: {{ b.stripe }};"></div>
+            <div style="display: flex; align-items: center; gap: 9px; margin-bottom: 9px;">
+              <span style="display: inline-flex; align-items: center; gap: 5px; font-size: 10.5px; font-weight: 600; color: #6E5F50; background: #F1EADB; border-radius: 6px; padding: 3px 8px;"><span style="width: 6px; height: 6px; border-radius: 50%; background: {{ b.projDot }};"></span>{{ b.project }}</span>
+              <span style="margin-left: auto; font-size: 10.5px; font-weight: 700; letter-spacing: 0.4px; color: {{ b.badgeFg }}; background: {{ b.badgeBg }}; border-radius: 6px; padding: 3px 9px; animation: {{ b.badgeAnim }};">{{ b.badge }}</span>
+            </div>
+            <div style="font-size: 15.5px; font-weight: 700; color: #34302A; margin-bottom: 4px;">{{ b.title }}</div>
+            <div style="font-size: 13px; color: #6E5F50; line-height: 1.5; margin-bottom: 13px;">{{ b.summary }}</div>
+            <div style="display: flex; align-items: center; gap: 12px;">
+              <span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: #A2937E; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; flex: 1;">{{ b.path }}</span>
+              <div onClick="{{ b.open }}" style="cursor: pointer; flex: none; padding: 7px 15px; border-radius: 9px; font-size: 12.5px; font-weight: 700; background: {{ b.btnBg }}; color: {{ b.btnFg }}; transition: all .14s;">{{ b.btnLabel }}</div>
+            </div>
+          </div>
+        </sc-for>
+
+        <sc-if value="{{ isEmpty }}" hint-placeholder-val="{{ false }}">
+          <div style="background: #FBF7EF; border: 1.5px dashed #DDD0BA; border-radius: 16px; padding: 34px 20px; text-align: center;">
+            <div style="font-family: 'Libre Caslon Text', serif; font-style: italic; font-size: 15px; color: #8A7660;">{{ emptyMsg }}</div>
+          </div>
+        </sc-if>
+      </div>
+
+      <!-- GRANDMA PANEL -->
+      <div style="position: sticky; top: 24px; background: #FFFDF9; border: 1px solid #E6DCC9; border-radius: 18px; padding: 20px; box-shadow: 0 10px 26px rgba(80,55,35,0.1);">
+        <div style="display: flex; justify-content: center; margin-bottom: 14px;">
+          {{ grandma }}
+        </div>
+        <div style="background: {{ moodBg }}; border-radius: 13px; padding: 11px 13px; font-family: 'Libre Caslon Text', serif; font-style: italic; font-size: 13px; line-height: 1.45; color: {{ moodInk }}; text-align: center; margin-bottom: 16px;">{{ quip }}</div>
+        <div style="display: flex; gap: 10px;">
+          <div style="flex: 1; background: #F6F1E7; border-radius: 11px; padding: 10px; text-align: center;">
+            <div style="font-size: 21px; font-weight: 700; color: #34302A;">{{ waiting }}</div>
+            <div style="font-size: 9.5px; letter-spacing: 0.5px; text-transform: uppercase; color: #9A876D;">waiting</div>
+          </div>
+          <div style="flex: 1; background: #F6F1E7; border-radius: 11px; padding: 10px; text-align: center;">
+            <div style="font-size: 21px; font-weight: 700; color: {{ oldestCol }};">{{ oldest }}</div>
+            <div style="font-size: 9.5px; letter-spacing: 0.5px; text-transform: uppercase; color: #9A876D;">oldest</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;: {&quot;width&quot;: 1040, &quot;height&quot;: 720}}">
+class Component extends DCLogic {
+  // simulated current.json
+  data = {
+    projects: [
+      { id: 'auth-refactor', dot: '#5A93C8' },
+      { id: 'q3-board-deck', dot: '#D2A23E' },
+      { id: 'grandma-widget', dot: '#9A78C8' },
+      { id: 'data-pipeline', dot: '#5FA57E' }
+    ],
+    brief_queue: [
+      { id: 'b1', project: 'auth-refactor', title: 'Pick a token-refresh strategy', summary: 'Sliding-window vs. fixed-expiry refresh. I drafted both; one breaks the mobile client. Your call before I wire it in.', brief_path: '.claude/briefs/refresh-strategy.md', cwd: '~/code/auth-refactor', age: 412 },
+      { id: 'b2', project: 'data-pipeline', title: 'Drop the legacy CSV importer?', summary: 'Nothing has called it in 90 days, but removing it is irreversible without a revert. Want me to delete or just deprecate?', brief_path: '.claude/briefs/legacy-importer.md', cwd: '~/work/data-pipeline', age: 168 },
+      { id: 'b3', project: 'auth-refactor', title: 'Approve the migration that touches 14 files', summary: 'The rename is mechanical but wide. I can stage it as one commit or four. Need a thumbs-up to proceed.', brief_path: '.claude/briefs/wide-migration.md', cwd: '~/code/auth-refactor', age: 47 },
+      { id: 'b4', project: 'grandma-widget', title: 'Which chime for the notification?', summary: 'Two-note vs. a soft single tone. Trivial, but you said to always ask before adding sound.', brief_path: '.claude/briefs/chime.md', cwd: '~/code/grandma-widget', age: 12 }
+    ]
+  };
+
+  state = { project: 'all', opened: {} };
+
+  pickProject(id) { this.setState({ project: id }); }
+
+  open(b) {
+    // deep-link: would launch `cwd`/`brief_path` in the editor
+    this.setState((s) => ({ opened: Object.assign({}, s.opened, { [b.id]: true }) }));
+  }
+
+  fmtAge(m) {
+    if (m < 60) return m + 'm';
+    const h = Math.floor(m / 60), mm = m % 60;
+    return mm ? h + 'h ' + mm + 'm' : h + 'h';
+  }
+  fmtAgeShort(m) { return m < 60 ? m + 'm' : Math.floor(m / 60) + 'h'; }
+
+  ageTier(m) {
+    if (m >= 360) return { stripe: '#B23A2E', bg: '#F7DAD6', fg: '#A8352A', label: 'STILL WAITING', throb: true };
+    if (m >= 120) return { stripe: '#D9823C', bg: '#FCE6D4', fg: '#B5662E', label: 'GETTING OLD', throb: false };
+    if (m >= 30) return { stripe: '#C9A24B', bg: '#FBF0D8', fg: '#9A7A2E', label: 'WAITING', throb: false };
+    return { stripe: '#5FA552', bg: '#E7F0E4', fg: '#4E7E50', label: 'FRESH', throb: false };
+  }
+
+  d(style, ...kids) { return React.createElement('div', { style: Object.assign({ position: 'absolute' }, style) }, ...kids); }
+
+  grandma(mood) {
+    const d = this.d.bind(this);
+    const skin = '#EBC9A4', hair = '#D8D2C8', line = '#6B4A35';
+    const brow = mood === 'cross' ? 24 : mood === 'stern' ? 17 : 11;
+    const mouth = mood === 'happy'
+      ? d({ left: '31px', top: '46px', width: '16px', height: '9px', borderTop: 'none', borderBottom: '2.6px solid ' + line, borderRadius: '50%' })
+      : mood === 'cross'
+        ? d({ left: '31px', top: '49px', width: '15px', height: '9px', borderTop: '2.6px solid ' + line, borderRadius: '50%' })
+        : d({ left: '32px', top: '49px', width: '13px', height: '2.4px', background: line, borderRadius: '2px' });
+    const eye = (x) => d({ left: x + 'px', top: '25px', width: '5px', height: '5px', animation: 'br-blink 4.4s ease-in-out infinite' },
+      d({ left: '0', top: '0', width: '5px', height: '5px', borderRadius: '50%', background: '#3A2A1E' }));
+    return d({ position: 'relative', width: '92px', height: '90px', animation: 'br-breathe 3.6s ease-in-out infinite' },
+      d({ left: '14px', top: '8px', width: '64px', height: '62px', borderRadius: '50%', background: hair }),
+      d({ left: '33px', top: '0', width: '26px', height: '24px', borderRadius: '50%', background: hair }),
+      d({ left: '40px', top: '-5px', width: '13px', height: '13px', borderRadius: '50%', background: '#C7C0B6' }),
+      d({ left: '20px', top: '16px', width: '52px', height: '52px', borderRadius: '50%', background: skin }),
+      d({ left: '26px', top: '20px', width: '13px', height: '2.6px', background: line, transform: 'rotate(' + brow + 'deg)', transformOrigin: '0 50%', transition: 'transform .2s' }),
+      d({ left: '53px', top: '20px', width: '13px', height: '2.6px', background: line, transform: 'rotate(-' + brow + 'deg)', transformOrigin: '100% 50%', transition: 'transform .2s' }),
+      d({ left: '24px', top: '24px', width: '15px', height: '15px', borderRadius: '50%', border: '2px solid ' + line, background: 'rgba(255,255,255,0.35)' }),
+      d({ left: '53px', top: '24px', width: '15px', height: '15px', borderRadius: '50%', border: '2px solid ' + line, background: 'rgba(255,255,255,0.35)' }),
+      d({ left: '38px', top: '30px', width: '15px', height: '2px', background: line }),
+      eye(29), eye(58),
+      d({ left: '44px', top: '34px', width: '6px', height: '8px', borderRadius: '50%', background: '#D89A6E' }),
+      d({ left: '24px', top: '40px', width: '9px', height: '6px', borderRadius: '50%', background: 'rgba(206,74,56,0.22)' }),
+      d({ left: '59px', top: '40px', width: '9px', height: '6px', borderRadius: '50%', background: 'rgba(206,74,56,0.22)' }),
+      mouth);
+  }
+
+  renderVals() {
+    const sel = this.state.project;
+    const all = this.data.brief_queue;
+    const visible = all.filter((b) => (sel === 'all' || b.project === sel) && !this.state.opened[b.id])
+      .sort((a, b) => b.age - a.age);
+
+    const projDot = (p) => (this.data.projects.find((x) => x.id === p) || {}).dot || '#A8A2AE';
+
+    const projects = [{ id: 'all', label: 'All' }].concat(this.data.projects.map((p) => ({ id: p.id, label: p.id })))
+      .map((p) => {
+        const on = sel === p.id;
+        const count = p.id === 'all'
+          ? all.filter((b) => !this.state.opened[b.id]).length
+          : all.filter((b) => b.project === p.id && !this.state.opened[b.id]).length;
+        return {
+          label: p.label, count: String(count), pick: () => this.pickProject(p.id),
+          dot: p.id === 'all' ? '#8A8590' : projDot(p.id),
+          bg: on ? '#34302A' : '#FFFDF9', fg: on ? '#F6EFDF' : '#5C5043',
+          bd: on ? '#34302A' : '#E0D4C0'
+        };
+      });
+
+    const briefs = visible.map((b) => {
+      const t = this.ageTier(b.age);
+      return {
+        project: b.project, projDot: projDot(b.project),
+        title: b.title, summary: b.summary,
+        path: b.cwd + '/' + b.brief_path,
+        badge: t.label + ' · ' + this.fmtAge(b.age), badgeBg: t.bg, badgeFg: t.fg,
+        badgeAnim: t.throb ? 'br-throb 1.5s ease-in-out infinite' : 'none',
+        stripe: t.stripe, op: 1,
+        btnLabel: 'Open \u203A', btnBg: t.stripe, btnFg: '#FFFFFF',
+        open: () => this.open(b)
+      };
+    });
+
+    const waiting = visible.length;
+    const oldestAge = waiting ? visible[0].age : 0;
+    const oldestTier = this.ageTier(oldestAge);
+
+    // mood + quip — reuses brief_pending, adds brief_piling & brief_stale triggers
+    let mood = 'happy', quip, moodBg = '#E7F0E4', moodInk = '#3E5E3E';
+    if (waiting === 0) {
+      quip = sel === 'all' ? 'Nothing to decide. Miracles do happen.' : 'Nothing waiting here. For once.';
+    } else if (oldestAge >= 360) {
+      mood = 'cross'; moodBg = '#F7DAD6'; moodInk = '#8A2E26';
+      quip = 'That top one has sat SIX HOURS. Decide, for pity\u2019s sake.'; // brief_stale
+    } else if (waiting >= 3) {
+      mood = 'cross'; moodBg = '#FCE6D4'; moodInk = '#8A4A20';
+      quip = 'Three briefs stacked up. They\u2019re not wine \u2014 they don\u2019t improve with age.'; // brief_piling
+    } else {
+      mood = 'stern'; moodBg = '#FBF0D8'; moodInk = '#7A5E22';
+      quip = 'A decision\u2019s waiting on you, dear. It won\u2019t make itself.'; // brief_pending
+    }
+
+    return {
+      projects, briefs,
+      isEmpty: waiting === 0,
+      emptyMsg: sel === 'all' ? 'The queue is empty. Go and put the kettle on.' : 'No briefs for this project.',
+      grandma: this.grandma(mood),
+      quip, moodBg, moodInk,
+      waiting: String(waiting),
+      oldest: waiting ? this.fmtAgeShort(oldestAge) : '\u2014',
+      oldestCol: waiting ? oldestTier.fg : '#9A876D'
+    };
+  }
+}
+</script>
+</body>
+</html>

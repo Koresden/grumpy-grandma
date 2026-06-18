@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous">
+  <link href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Text:ital,wght@0,400;0,700;1,400&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+  <style>
+    html, body { margin: 0; padding: 0; background: #E7E2DA; }
+    @keyframes lg-blink { 0%, 92%, 100% { transform: scaleY(1); } 96% { transform: scaleY(0.12); } }
+    @keyframes lg-breathe { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-3px); } }
+    @keyframes lg-grow { from { transform: scaleY(0.001); } to { transform: scaleY(1); } }
+    @keyframes lg-bar { from { transform: scaleX(0.001); } to { transform: scaleX(1); } }
+  </style>
+</helmet>
+
+<div style="min-height: 100vh; background: radial-gradient(130% 90% at 50% 0%, #F3EBDD, #E4D8C6 62%, #C9B79E); font-family: Helvetica, Arial, sans-serif; color: #3A2F28; padding: 40px 30px 70px;">
+
+  <div style="max-width: 1040px; margin: 0 auto;">
+
+    <!-- header -->
+    <div style="margin-bottom: 18px;">
+      <div style="font-size: 11px; letter-spacing: 2.6px; text-transform: uppercase; color: #927E63; margin-bottom: 7px;">Grumpy Grandma · The Ledger</div>
+      <h1 style="margin: 0; font-family: 'Libre Caslon Text', serif; font-size: 30px; font-weight: 700; letter-spacing: -0.5px;">The Ledger</h1>
+      <p style="margin: 6px 0 0; font-size: 13.5px; color: #6E5F50; max-width: 540px; line-height: 1.5;">A week of token usage, tallied from every sub-agent that finished its work. She remembers all of it.</p>
+    </div>
+
+    <!-- §5.5 PROJECT SWITCHER (shared) -->
+    <div style="display: flex; align-items: center; gap: 9px; flex-wrap: wrap; margin-bottom: 20px;">
+      <span style="font-size: 11px; letter-spacing: 1.4px; text-transform: uppercase; color: #9A876D; margin-right: 2px;">Project</span>
+      <sc-for list="{{ projects }}" as="p" hint-placeholder-count="5">
+        <div onClick="{{ p.pick }}" style="cursor: pointer; display: flex; align-items: center; gap: 7px; padding: 7px 13px; border-radius: 20px; font-size: 12.5px; font-weight: 600; background: {{ p.bg }}; color: {{ p.fg }}; border: 1.5px solid {{ p.bd }}; transition: all .14s;">
+          <span style="width: 7px; height: 7px; border-radius: 50%; background: {{ p.dot }};"></span>{{ p.label }}
+        </div>
+      </sc-for>
+    </div>
+
+    <!-- top row: chart + grandma -->
+    <div style="display: grid; grid-template-columns: 1fr 280px; gap: 22px; align-items: stretch; margin-bottom: 22px;">
+
+      <!-- 7-DAY CHART -->
+      <div style="background: #FFFDF9; border: 1px solid #E6DCC9; border-radius: 18px; padding: 20px 22px; box-shadow: 0 10px 26px rgba(80,55,35,0.1);">
+        <div style="display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 18px;">
+          <span style="font-size: 14px; font-weight: 700; color: #34302A;">Tokens · last 7 days</span>
+          <span style="font-size: 12px; color: #9A876D;">peak <span style="font-weight: 700; color: #B5662E;">{{ peakDay }}</span></span>
+        </div>
+        <div style="display: flex; align-items: flex-end; gap: 12px; height: 188px;">
+          <sc-for list="{{ days }}" as="day" hint-placeholder-count="7">
+            <div style="flex: 1; display: flex; flex-direction: column; align-items: center; gap: 8px; height: 100%; justify-content: flex-end;">
+              <span style="font-family: 'IBM Plex Mono', monospace; font-size: 10.5px; font-weight: 600; color: {{ day.valCol }};">{{ day.val }}</span>
+              <div style="width: 100%; max-width: 46px; height: {{ day.h }}px; border-radius: 7px 7px 3px 3px; background: {{ day.fill }}; transform-origin: bottom; animation: lg-grow .5s ease-out;"></div>
+              <span style="font-size: 11px; font-weight: 600; color: {{ day.labCol }};">{{ day.label }}</span>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+
+      <!-- GRANDMA PANEL -->
+      <div style="background: #FFFDF9; border: 1px solid #E6DCC9; border-radius: 18px; padding: 20px; box-shadow: 0 10px 26px rgba(80,55,35,0.1); display: flex; flex-direction: column;">
+        <div style="display: flex; justify-content: center; margin-bottom: 12px;">{{ grandma }}</div>
+        <div style="background: {{ moodBg }}; border-radius: 13px; padding: 11px 13px; font-family: 'Libre Caslon Text', serif; font-style: italic; font-size: 12.5px; line-height: 1.45; color: {{ moodInk }}; text-align: center; margin-bottom: 14px;">{{ quip }}</div>
+        <div style="margin-top: auto; display: flex; flex-direction: column; gap: 9px;">
+          <div style="display: flex; justify-content: space-between; align-items: baseline; padding: 8px 11px; background: #F6F1E7; border-radius: 10px;">
+            <span style="font-size: 11px; color: #9A876D;">total this week</span>
+            <span style="font-family: 'IBM Plex Mono', monospace; font-size: 14px; font-weight: 700; color: #34302A;">{{ weekTokens }}</span>
+          </div>
+          <div style="display: flex; justify-content: space-between; align-items: baseline; padding: 8px 11px; background: #F6F1E7; border-radius: 10px;">
+            <span style="font-size: 11px; color: #9A876D;">est. cost</span>
+            <span style="font-family: 'IBM Plex Mono', monospace; font-size: 14px; font-weight: 700; color: #B5662E;">{{ weekCost }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TOP OFFENDERS -->
+    <div style="background: #FFFDF9; border: 1px solid #E6DCC9; border-radius: 18px; padding: 20px 22px; box-shadow: 0 10px 26px rgba(80,55,35,0.1);">
+      <div style="display: flex; align-items: baseline; gap: 10px; margin-bottom: 16px;">
+        <span style="font-size: 14px; font-weight: 700; color: #34302A;">Top offenders</span>
+        <span style="font-size: 12px; color: #9A876D;">sub-agents ranked by tokens burned</span>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 11px;">
+        <sc-for list="{{ ranking }}" as="r" hint-placeholder-count="6">
+          <div style="display: flex; align-items: center; gap: 14px;">
+            <span style="width: 18px; text-align: right; font-family: 'IBM Plex Mono', monospace; font-size: 12px; font-weight: 700; color: {{ r.rankCol }};">{{ r.rank }}</span>
+            <div style="width: 130px; flex: none; display: flex; align-items: center; gap: 8px;">
+              <span style="width: 9px; height: 9px; border-radius: 50%; background: {{ r.col }};"></span>
+              <div>
+                <div style="font-size: 13px; font-weight: 700; color: #34302A; line-height: 1.1;">{{ r.name }}</div>
+                <div style="font-size: 10px; color: #9A876D;">{{ r.role }}</div>
+              </div>
+            </div>
+            <div style="flex: 1; height: 18px; background: #F1EADB; border-radius: 9px; overflow: hidden;">
+              <div style="height: 100%; width: {{ r.pct }}; background: {{ r.col }}; border-radius: 9px;"></div>
+            </div>
+            <span style="width: 64px; flex: none; text-align: right; font-family: 'IBM Plex Mono', monospace; font-size: 12.5px; font-weight: 700; color: #34302A;">{{ r.tokens }}</span>
+            <span style="width: 56px; flex: none; text-align: right; font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: #B5662E;">{{ r.cost }}</span>
+            <span style="width: 52px; flex: none; text-align: right; font-size: 11px; color: #9A876D;">{{ r.runs }} runs</span>
+          </div>
+        </sc-for>
+      </div>
+      <div style="margin-top: 16px; padding-top: 13px; border-top: 1px solid #EFE7D7; display: flex; align-items: flex-start; gap: 8px;">
+        <span style="flex: none; width: 15px; height: 15px; border-radius: 50%; border: 1.5px solid #B89A6E; color: #B89A6E; font-size: 10px; font-weight: 700; display: flex; align-items: center; justify-content: center; margin-top: 1px;">i</span>
+        <span style="font-size: 11.5px; color: #8A7660; line-height: 1.5; font-style: italic; font-family: 'Libre Caslon Text', serif;">{{ caveat }}</span>
+      </div>
+    </div>
+
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;: {&quot;width&quot;: 1040, &quot;height&quot;: 740}}">
+class Component extends DCLogic {
+  agentMeta = {
+    Grandma: { role: 'orchestrator', col: '#7A5C84' },
+    Ada: { role: 'research', col: '#5A93C8' },
+    Bea: { role: 'build', col: '#5FA57E' },
+    Pearl: { role: 'review', col: '#9A78C8' },
+    Mae: { role: 'tests', col: '#D2A23E' },
+    Glad: { role: 'linter', col: '#B07AC8' },
+    Fern: { role: 'web search', col: '#5AA9C8' }
+  };
+  projectsList = [
+    { id: 'auth-refactor', dot: '#5A93C8' },
+    { id: 'q3-board-deck', dot: '#D2A23E' },
+    { id: 'grandma-widget', dot: '#9A78C8' },
+    { id: 'data-pipeline', dot: '#5FA57E' }
+  ];
+  dayLabels = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+  RATE = 6.1; // $ per 1M tokens — local estimate
+
+  state = { project: 'all' };
+
+  constructor(...a) { super(...a); this.events = this.buildEvents(); }
+
+  // simulate events.ndjson (subagent_stop lines)
+  buildEvents() {
+    let seed = 91;
+    const rnd = () => { seed = (seed * 1103515245 + 12345) & 0x7fffffff; return seed / 0x7fffffff; };
+    const agents = Object.keys(this.agentMeta);
+    const projects = this.projectsList.map((p) => p.id);
+    const ev = [];
+    for (let day = 0; day < 7; day++) {
+      const intensity = [0.7, 1.0, 0.85, 1.25, 1.4, 0.35, 0.2][day];
+      projects.forEach((project, pi) => {
+        if (rnd() > 0.55 + pi * 0.05) return; // not every project every day
+        agents.forEach((agent) => {
+          if (agent !== 'Grandma' && rnd() > 0.62) return;
+          const base = agent === 'Grandma' ? 90000 : 30000 + rnd() * 110000;
+          const tokens = Math.round(base * intensity);
+          if (tokens < 8000) return;
+          ev.push({ type: 'subagent_stop', day, project, agent, tokens, cost_est: tokens / 1e6 * this.RATE, duration: Math.round(20 + rnd() * 240) });
+        });
+      });
+    }
+    return ev;
+  }
+
+  pickProject(id) { this.setState({ project: id }); }
+
+  fmtTok(t) { return t >= 1e6 ? (t / 1e6).toFixed(2) + 'M' : Math.round(t / 1000) + 'K'; }
+  fmtCost(c) { return '$' + c.toFixed(2); }
+
+  d(style, ...kids) { return React.createElement('div', { style: Object.assign({ position: 'absolute' }, style) }, ...kids); }
+
+  grandma(mood) {
+    const d = this.d.bind(this);
+    const skin = '#EBC9A4', hair = '#D8D2C8', line = '#6B4A35';
+    const brow = mood === 'cross' ? 23 : mood === 'pleased' ? 9 : 16;
+    const mouth = mood === 'pleased'
+      ? d({ left: '31px', top: '46px', width: '16px', height: '9px', borderBottom: '2.6px solid ' + line, borderRadius: '50%' })
+      : mood === 'cross'
+        ? d({ left: '31px', top: '49px', width: '15px', height: '9px', borderTop: '2.6px solid ' + line, borderRadius: '50%' })
+        : d({ left: '32px', top: '49px', width: '13px', height: '2.4px', background: line, borderRadius: '2px' });
+    const eye = (x) => d({ left: x + 'px', top: '25px', width: '5px', height: '5px', animation: 'lg-blink 4.4s ease-in-out infinite' },
+      d({ left: '0', top: '0', width: '5px', height: '5px', borderRadius: '50%', background: '#3A2A1E' }));
+    return d({ position: 'relative', width: '92px', height: '90px', animation: 'lg-breathe 3.6s ease-in-out infinite' },
+      d({ left: '14px', top: '8px', width: '64px', height: '62px', borderRadius: '50%', background: hair }),
+      d({ left: '33px', top: '0', width: '26px', height: '24px', borderRadius: '50%', background: hair }),
+      d({ left: '40px', top: '-5px', width: '13px', height: '13px', borderRadius: '50%', background: '#C7C0B6' }),
+      d({ left: '20px', top: '16px', width: '52px', height: '52px', borderRadius: '50%', background: skin }),
+      d({ left: '26px', top: '20px', width: '13px', height: '2.6px', background: line, transform: 'rotate(' + brow + 'deg)', transformOrigin: '0 50%', transition: 'transform .2s' }),
+      d({ left: '53px', top: '20px', width: '13px', height: '2.6px', background: line, transform: 'rotate(-' + brow + 'deg)', transformOrigin: '100% 50%', transition: 'transform .2s' }),
+      d({ left: '24px', top: '24px', width: '15px', height: '15px', borderRadius: '50%', border: '2px solid ' + line, background: 'rgba(255,255,255,0.35)' }),
+      d({ left: '53px', top: '24px', width: '15px', height: '15px', borderRadius: '50%', border: '2px solid ' + line, background: 'rgba(255,255,255,0.35)' }),
+      d({ left: '38px', top: '30px', width: '15px', height: '2px', background: line }),
+      eye(29), eye(58),
+      d({ left: '44px', top: '34px', width: '6px', height: '8px', borderRadius: '50%', background: '#D89A6E' }),
+      d({ left: '24px', top: '40px', width: '9px', height: '6px', borderRadius: '50%', background: 'rgba(206,74,56,0.22)' }),
+      d({ left: '59px', top: '40px', width: '9px', height: '6px', borderRadius: '50%', background: 'rgba(206,74,56,0.22)' }),
+      mouth);
+  }
+
+  renderVals() {
+    const sel = this.state.project;
+    const evs = this.events.filter((e) => sel === 'all' || e.project === sel);
+
+    // per-day aggregation
+    const dayTok = Array(7).fill(0);
+    evs.forEach((e) => { dayTok[e.day] += e.tokens; });
+    const maxDay = Math.max(1, ...dayTok);
+    const peakIdx = dayTok.indexOf(maxDay);
+    const days = dayTok.map((t, i) => {
+      const isPeak = i === peakIdx && t > 0;
+      return {
+        label: this.dayLabels[i],
+        val: t > 0 ? this.fmtTok(t) : '\u2014',
+        valCol: isPeak ? '#B5662E' : '#9A876D',
+        labCol: isPeak ? '#34302A' : '#9A876D',
+        h: Math.max(3, Math.round((t / maxDay) * 150)),
+        fill: t === 0 ? '#ECE3D2' : isPeak ? 'linear-gradient(180deg, #E08A4A, #C76A36)' : 'linear-gradient(180deg, #C9A96E, #B08A4E)'
+      };
+    });
+
+    // per-agent aggregation
+    const byAgent = {};
+    evs.forEach((e) => {
+      const a = byAgent[e.agent] || (byAgent[e.agent] = { tokens: 0, cost: 0, runs: 0 });
+      a.tokens += e.tokens; a.cost += e.cost_est; a.runs += 1;
+    });
+    const sorted = Object.keys(byAgent).map((k) => Object.assign({ name: k }, byAgent[k], this.agentMeta[k]))
+      .sort((a, b) => b.tokens - a.tokens);
+    const maxAg = Math.max(1, ...sorted.map((a) => a.tokens));
+    const ranking = sorted.map((a, i) => ({
+      rank: '#' + (i + 1), rankCol: i === 0 ? '#B5662E' : '#B6A78C',
+      name: a.name, role: a.role, col: a.col,
+      pct: Math.round((a.tokens / maxAg) * 100) + '%',
+      tokens: this.fmtTok(a.tokens), cost: this.fmtCost(a.cost), runs: a.runs
+    }));
+
+    const weekTok = dayTok.reduce((s, t) => s + t, 0);
+    const weekCost = weekTok / 1e6 * this.RATE;
+    const top = sorted[0];
+
+    // projects chips
+    const projects = [{ id: 'all', label: 'All', dot: '#8A8590' }]
+      .concat(this.projectsList.map((p) => ({ id: p.id, label: p.id, dot: p.dot })))
+      .map((p) => {
+        const on = sel === p.id;
+        return { label: p.label, dot: p.dot, pick: () => this.pickProject(p.id),
+          bg: on ? '#34302A' : '#FFFDF9', fg: on ? '#F6EFDF' : '#5C5043', bd: on ? '#34302A' : '#E0D4C0' };
+      });
+
+    // templated history_* quips
+    let mood = 'stern', quip, moodBg = '#FBF0D8', moodInk = '#7A5E22';
+    const peakRatio = maxDay / (weekTok / 7 || 1);
+    if (weekTok === 0) {
+      mood = 'pleased'; moodBg = '#E7F0E4'; moodInk = '#3E5E3E';
+      quip = 'Not a token spent here. A blessed, frugal week.';
+    } else if (weekTok < 1.2e6) {
+      mood = 'pleased'; moodBg = '#E7F0E4'; moodInk = '#3E5E3E';
+      quip = 'A quiet week, for once. I almost approve.'; // history_quiet
+    } else if (peakRatio > 2.1) {
+      mood = 'cross'; moodBg = '#FCE6D4'; moodInk = '#8A4A20';
+      quip = this.dayLabels[peakIdx] + ' was a bonfire \u2014 ' + this.fmtTok(maxDay) + ' in one day. What were you building?'; // history_spike
+    } else {
+      mood = 'cross'; moodBg = '#FCE6D4'; moodInk = '#8A4A20';
+      quip = top.name + ' burned the most again \u2014 ' + this.fmtTok(top.tokens) + '. Typical.'; // history_topagent
+    }
+    if (sel !== 'all' && weekTok > 0) quip = '\u201C' + sel + '\u201D alone: ' + quip;
+
+    return {
+      projects, days, ranking,
+      peakDay: weekTok > 0 ? this.dayLabels[peakIdx] : '\u2014',
+      grandma: this.grandma(mood),
+      quip, moodBg, moodInk,
+      weekTokens: this.fmtTok(weekTok),
+      weekCost: this.fmtCost(weekCost),
+      caveat: 'Costs are estimated from local token counts at ~$' + this.RATE.toFixed(2) + '/M \u2014 not your actual Anthropic bill. Cache hits, tiers and discounts aren\u2019t reflected.'
+    };
+  }
+}
+</script>
+</body>
+</html>

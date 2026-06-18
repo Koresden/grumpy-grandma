@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous">
+  <link href="https://fonts.googleapis.com/css2?family=Patrick+Hand&family=Libre+Caslon+Text:ital@0;1&display=swap" rel="stylesheet">
+  <style>
+    html, body { margin: 0; padding: 0; background: #D7D4DC; }
+    @keyframes gw-blink { 0%, 92%, 100% { transform: scaleY(1); } 96% { transform: scaleY(0.1); } }
+    @keyframes gw-tap { 0%, 70%, 100% { transform: rotate(-38deg); } 80% { transform: rotate(-46deg); } 90% { transform: rotate(-38deg); } }
+    @keyframes gw-breathe { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-2.5px); } }
+    @keyframes gw-flowx { to { background-position-x: 18px; } }
+    @keyframes gw-flowxr { to { background-position-x: -18px; } }
+    @keyframes gw-flowy { to { background-position-y: 18px; } }
+    @keyframes gw-flowyr { to { background-position-y: -18px; } }
+    @keyframes gw-pulse { 0%, 100% { box-shadow: 0 0 0 0 rgba(242,236,220,0.0), inset 0 0 14px rgba(242,236,220,0.05); } 50% { box-shadow: 0 0 16px 1px rgba(242,236,220,0.22), inset 0 0 16px rgba(242,236,220,0.1); } }
+    @keyframes gw-dust { 0% { transform: translateY(0) scaleX(1); opacity: 0; } 30% { opacity: 0.5; } 100% { transform: translateY(-16px) scaleX(1.6); opacity: 0; } }
+  </style>
+</helmet>
+
+<div style="min-height: 100vh; background: #D7D4DC; font-family: Helvetica, Arial, sans-serif; color: #2B2930; padding: 34px 30px 64px;">
+
+  <div style="max-width: 1000px; margin: 0 auto 22px;">
+    <div style="font-size: 11px; letter-spacing: 2.5px; text-transform: uppercase; color: #7C7986; margin-bottom: 9px;">Grumpy Grandma · Agentic workflow</div>
+    <h1 style="margin: 0 0 6px; font-size: 28px; font-weight: 700; letter-spacing: -0.5px;">Grandma explains the agent</h1>
+    <p style="margin: 0; font-size: 13.5px; color: #5E5B66; max-width: 600px; line-height: 1.5;">How a coding agent gets from your prompt to a finished result &mdash; narrated, at the chalkboard, with maximum disapproval.</p>
+  </div>
+
+  <!-- CHALKBOARD -->
+  <div style="max-width: 1000px; margin: 0 auto; border-radius: 12px; padding: 14px; background: linear-gradient(170deg, #7A5436, #5E3F28); box-shadow: 0 18px 44px rgba(40,30,50,0.28), inset 0 2px 0 rgba(255,255,255,0.12);">
+    <div style="position: relative; height: 432px; border-radius: 6px; overflow: hidden; background: radial-gradient(120% 130% at 70% 10%, #36473A, #283528 70%, #20291F); box-shadow: inset 0 0 60px rgba(0,0,0,0.5), inset 0 0 0 2px rgba(0,0,0,0.3);">
+
+      <!-- chalk smudges -->
+      <div style="position: absolute; inset: 0; opacity: 0.5; background: radial-gradient(60px 24px at 22% 80%, rgba(242,236,220,0.06), transparent), radial-gradient(80px 30px at 78% 22%, rgba(242,236,220,0.05), transparent); pointer-events: none;"></div>
+
+      <!-- header caption -->
+      <div style="position: absolute; top: 16px; left: 276px; font-family: 'Patrick Hand', cursive; font-size: 26px; color: #F4EEDE; line-height: 1; white-space: nowrap;">{{ stepLabel }}</div>
+      <div style="position: absolute; top: 20px; right: 26px; font-family: 'Patrick Hand', cursive; font-size: 16px; color: rgba(242,236,220,0.5); white-space: nowrap;">step {{ stepNum }} / {{ total }}</div>
+      <div style="position: absolute; top: 52px; left: 276px; right: 24px; font-family: 'Patrick Hand', cursive; font-size: 16px; color: rgba(242,236,220,0.72); line-height: 1.3;">{{ stepCaption }}</div>
+
+      <!-- workflow canvas -->
+      {{ board }}
+
+      <!-- grandma -->
+      <div style="position: absolute; left: 22px; bottom: 0;">
+        <div style="position: absolute; left: 6px; bottom: 196px; width: 244px; background: #F6EFDD; border: 1px solid #E2D6BC; border-radius: 13px; padding: 10px 13px; box-shadow: 0 8px 22px rgba(0,0,0,0.3); font-family: 'Libre Caslon Text', serif; font-style: italic; font-size: 13px; line-height: 1.4; color: #5C4A38; z-index: 4;">
+          {{ quip }}
+          <div style="position: absolute; left: 40px; bottom: -8px; width: 14px; height: 14px; background: #F6EFDD; border-right: 1px solid #E2D6BC; border-bottom: 1px solid #E2D6BC; transform: rotate(45deg);"></div>
+        </div>
+        {{ grandma }}
+      </div>
+
+      <!-- chalk tray -->
+      <div style="position: absolute; left: 0; right: 0; bottom: 0; height: 8px; background: linear-gradient(180deg, rgba(0,0,0,0.25), rgba(0,0,0,0.1));"></div>
+    </div>
+  </div>
+
+  <!-- CONTROLS -->
+  <div style="max-width: 1000px; margin: 16px auto 0; display: flex; align-items: center; gap: 14px; flex-wrap: wrap;">
+    <div style="display: flex; gap: 8px;">
+      <div onClick="{{ prev }}" style="cursor: pointer; padding: 9px 16px; border-radius: 10px; font-size: 13px; font-weight: 600; background: #FFFFFF; color: #4A4654; box-shadow: 0 3px 10px rgba(40,30,50,0.1);">&lsaquo; Back</div>
+      <div onClick="{{ toggle }}" style="cursor: pointer; padding: 9px 18px; border-radius: 10px; font-size: 13px; font-weight: 700; background: #34313A; color: #FFFFFF; box-shadow: 0 3px 10px rgba(40,30,50,0.16);">{{ playLabel }}</div>
+      <div onClick="{{ next }}" style="cursor: pointer; padding: 9px 16px; border-radius: 10px; font-size: 13px; font-weight: 600; background: #FFFFFF; color: #4A4654; box-shadow: 0 3px 10px rgba(40,30,50,0.1);">Next &rsaquo;</div>
+    </div>
+    <div style="display: flex; gap: 7px; margin-left: 4px;">
+      <sc-for list="{{ dots }}" as="dot" hint-placeholder-count="10">
+        <div onClick="{{ dot.go }}" style="cursor: pointer; width: 11px; height: 11px; border-radius: 50%; background: {{ dot.bg }}; border: 1.5px solid {{ dot.bd }}; transition: all .2s;"></div>
+      </sc-for>
+    </div>
+    <span style="margin-left: auto; font-size: 12px; color: #8A8590; font-family: 'Libre Caslon Text', serif; font-style: italic;">{{ hint }}</span>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;: {&quot;width&quot;: 1000, &quot;height&quot;: 640}}">
+class Component extends DCLogic {
+  state = { step: 0, playing: true };
+
+  nodes = [
+    { node: 'Prompt', icon: 'chat' },
+    { node: 'Plan', icon: 'plan' },
+    { node: 'Tools', icon: 'gear' },
+    { node: 'Sub-agent', icon: 'people' },
+    { node: 'Review', icon: 'check' },
+    { node: 'Deliver', icon: 'send' }
+  ];
+
+  // timeline of beats (with failure branches)
+  beats = [
+    { node: 0, st: 'ok', title: 'Your prompt', cap: 'You hand over a task \u2014 usually a vague one.', quip: '\u201CJust a quick thing,\u201D you say. It is never a quick thing.' },
+    { node: 1, st: 'ok', title: 'Make a plan', cap: 'It breaks the work into a little to-do list.', quip: 'A list! Groundbreaking. I\u2019ve kept one on the fridge since 1974.' },
+    { node: 2, st: 'run', title: 'Use tools', cap: 'Reads, searches and edits your files.', quip: 'Rummaging through every drawer in the house. Put it ALL back.' },
+    { node: 2, st: 'error', arrow: 'retry', title: 'Tool call failed', cap: 'A tool returns an error \u2014 it must try again.', quip: 'FAILED already? In MY day, things worked the first time.' },
+    { node: 2, st: 'ok', title: 'Retry the call', cap: 'Adjusts the arguments and runs it again.', quip: 'Try, try again, it says. And again. And AGAIN.' },
+    { node: 3, st: 'ok', title: 'Spawn a sub-agent', cap: 'Forks a helper to verify the work.', quip: 'Now it\u2019s hired help. Who pays for the tokens? You do, dear.' },
+    { node: 4, st: 'reject', arrow: 'kickback', title: 'Review rejects it', cap: 'The check fails \u2014 it\u2019s sent back to fix.', quip: 'Rejected! Back you go. Should\u2019ve measured twice, dear.' },
+    { node: 2, st: 'run', title: 'Back to fixing', cap: 'Returns to the tools to fix the issue.', quip: 'Round two. The casserole has gone stone cold.' },
+    { node: 4, st: 'ok', title: 'Review passes', cap: 'Re-checks the work \u2014 all clear this time.', quip: 'Finally passes. A medal? Don\u2019t push your luck.' },
+    { node: 5, st: 'ok', title: 'Deliver', cap: 'Hands the finished result back to you.', quip: 'Done. Was that so hard? Now go and get some fresh air.' }
+  ];
+
+  // node box top-left positions on the 536x224 canvas
+  pos = [
+    { x: 24, y: 24 }, { x: 214, y: 24 }, { x: 404, y: 24 },
+    { x: 404, y: 164 }, { x: 214, y: 164 }, { x: 24, y: 164 }
+  ];
+
+  segGeom = [
+    { x: 156, y: 51, len: 58, dir: 'r' },
+    { x: 346, y: 51, len: 58, dir: 'r' },
+    { x: 469, y: 80, len: 84, dir: 'd' },
+    { x: 346, y: 191, len: 58, dir: 'l' },
+    { x: 156, y: 191, len: 58, dir: 'l' }
+  ];
+
+  componentDidMount() { this.startTimer(); }
+  componentWillUnmount() { clearInterval(this.timer); }
+
+  startTimer() {
+    clearInterval(this.timer);
+    this.timer = setInterval(() => {
+      if (this.state.playing) this.setState((s) => ({ step: (s.step + 1) % this.beats.length }));
+    }, 3000);
+  }
+
+  go(n) { const L = this.beats.length; this.setState({ step: (n + L) % L }); this.startTimer(); }
+  toggle() { this.setState((s) => ({ playing: !s.playing })); this.startTimer(); }
+
+  d(style, ...kids) {
+    return React.createElement('div', { style: Object.assign({ position: 'absolute' }, style) }, ...kids);
+  }
+
+  // ---------- chalk icons (~26x26) ----------
+  icon(name, col) {
+    const d = this.d.bind(this);
+    const ln = (s) => Object.assign({ background: col, borderRadius: '2px' }, s);
+    if (name === 'chat') return d({ position: 'relative', width: '26px', height: '26px' },
+      d({ left: '1px', top: '3px', width: '24px', height: '16px', borderRadius: '6px', border: '2px solid ' + col }),
+      d({ left: '6px', top: '17px', width: '7px', height: '7px', borderLeft: '2px solid ' + col, borderBottom: '2px solid ' + col, transform: 'skewX(-18deg)' }));
+    if (name === 'plan') return d({ position: 'relative', width: '26px', height: '26px' },
+      d(ln({ left: '8px', top: '4px', width: '16px', height: '2.4px' })),
+      d(ln({ left: '8px', top: '12px', width: '16px', height: '2.4px' })),
+      d(ln({ left: '8px', top: '20px', width: '12px', height: '2.4px' })),
+      d({ left: '0px', top: '2px', width: '5px', height: '3px', borderLeft: '2px solid ' + col, borderBottom: '2px solid ' + col, transform: 'rotate(-45deg)' }),
+      d({ left: '0px', top: '10px', width: '5px', height: '3px', borderLeft: '2px solid ' + col, borderBottom: '2px solid ' + col, transform: 'rotate(-45deg)' }));
+    if (name === 'gear') return d({ position: 'relative', width: '26px', height: '26px' },
+      d({ left: '5px', top: '5px', width: '16px', height: '16px', borderRadius: '50%', border: '2.5px solid ' + col }),
+      d({ left: '11px', top: '11px', width: '4px', height: '4px', borderRadius: '50%', background: col }),
+      ...[0, 45, 90, 135].map((a) => d({ left: '12px', top: '0px', width: '2px', height: '26px', background: col, borderRadius: '2px', transform: 'rotate(' + a + 'deg)', transformOrigin: '50% 50%', opacity: 0.9 })),
+      d({ left: '4px', top: '4px', width: '18px', height: '18px', borderRadius: '50%', background: 'inherit' }));
+    if (name === 'people') return d({ position: 'relative', width: '26px', height: '26px' },
+      d({ left: '2px', top: '5px', width: '8px', height: '8px', borderRadius: '50%', border: '2px solid ' + col }),
+      d({ left: '0px', top: '14px', width: '14px', height: '9px', borderRadius: '7px 7px 0 0', border: '2px solid ' + col, borderBottom: 'none' }),
+      d({ left: '14px', top: '2px', width: '9px', height: '9px', borderRadius: '50%', border: '2px solid ' + col, background: 'inherit' }),
+      d({ left: '12px', top: '12px', width: '15px', height: '11px', borderRadius: '7px 7px 0 0', border: '2px solid ' + col, borderBottom: 'none', background: 'inherit' }));
+    if (name === 'check') return d({ position: 'relative', width: '26px', height: '26px' },
+      d({ left: '3px', top: '3px', width: '20px', height: '20px', borderRadius: '50%', border: '2px solid ' + col }),
+      d({ left: '7px', top: '9px', width: '9px', height: '5px', borderLeft: '2.4px solid ' + col, borderBottom: '2.4px solid ' + col, transform: 'rotate(-45deg)' }));
+    // send
+    return d({ position: 'relative', width: '26px', height: '26px' },
+      d({ left: '2px', top: '3px', width: '20px', height: '20px', borderTop: '2px solid ' + col, borderRight: '2px solid ' + col, transform: 'rotate(45deg)', borderRadius: '2px' }),
+      d({ left: '5px', top: '12px', width: '17px', height: '2.4px', background: col, borderRadius: '2px', transform: 'rotate(-45deg)' }));
+  }
+
+  node(i, status) {
+    const d = this.d.bind(this);
+    const p = this.pos[i], s = this.nodes[i];
+    const chalk = '#F4EEDE', red = '#E78B79', amber = '#E8C46A', green = 'rgba(154,210,150,0.95)';
+    const live = status === 'active' || status === 'err' || status === 'rej';
+    const col = status === 'err' ? red : status === 'rej' ? amber : status === 'active' ? chalk
+      : status === 'done' ? 'rgba(244,238,222,0.74)' : 'rgba(244,238,222,0.34)';
+    const border = status === 'err' ? '2.5px solid ' + red : status === 'rej' ? '2.5px solid ' + amber
+      : status === 'active' ? '2.5px solid ' + chalk : status === 'done' ? '2px solid rgba(244,238,222,0.6)' : '2px dashed rgba(244,238,222,0.3)';
+    const sub = status === 'done' ? { t: '\u2713 done', c: green } : status === 'err' ? { t: '\u2717 failed', c: red }
+      : status === 'rej' ? { t: '\u21A9 sent back', c: amber } : null;
+    return d({ left: p.x + 'px', top: p.y + 'px', width: '132px', height: '56px', borderRadius: '11px', border: border,
+        background: live ? 'rgba(244,238,222,0.07)' : 'transparent',
+        animation: live ? 'gw-pulse 1.5s ease-in-out infinite' : 'none',
+        display: 'flex', alignItems: 'center', gap: '9px', padding: '0 12px', boxSizing: 'border-box' },
+      this.icon(s.icon, col),
+      d({ position: 'relative', width: 'auto' },
+        d({ position: 'relative', fontFamily: "'Patrick Hand', cursive", fontSize: '17px', color: col, lineHeight: '1', whiteSpace: 'nowrap' }, s.node),
+        sub ? d({ position: 'relative', fontFamily: "'Patrick Hand', cursive", fontSize: '12px', color: sub.c, marginTop: '3px', whiteSpace: 'nowrap' }, sub.t) : null),
+      status === 'active' ? d({ left: '10px', bottom: '4px', width: '112px', height: '5px', borderBottom: '2.5px solid ' + chalk, borderRadius: '50%', opacity: 0.7 }) : null);
+  }
+
+  flowLine(g, col, anim) {
+    const d = this.d.bind(this);
+    const horiz = g.dir !== 'd';
+    const grad = horiz
+      ? 'repeating-linear-gradient(90deg, ' + col + ' 0 7px, transparent 7px 14px)'
+      : 'repeating-linear-gradient(0deg, ' + col + ' 0 7px, transparent 7px 14px)';
+    return horiz
+      ? d({ left: g.x + 'px', top: (g.y - 1.5) + 'px', width: g.len + 'px', height: '3px', backgroundImage: grad, backgroundSize: '14px 3px', animation: anim })
+      : d({ left: (g.x - 1.5) + 'px', top: g.y + 'px', width: '3px', height: g.len + 'px', backgroundImage: grad, backgroundSize: '3px 14px', animation: anim });
+  }
+
+  retryArc() {
+    const d = this.d.bind(this);
+    const red = '#E78B79';
+    return d({ left: '0', top: '0', width: '536px', height: '224px' },
+      d({ left: '453px', top: '-12px', width: '34px', height: '30px', borderRadius: '50%', border: '3px solid ' + red, borderBottomColor: 'transparent', borderLeftColor: 'transparent', transform: 'rotate(35deg)', animation: 'gw-pulse 1s ease-in-out infinite' }),
+      d({ left: '455px', top: '15px', width: '9px', height: '2.6px', background: red, borderRadius: '2px', transformOrigin: '50% 50%', transform: 'rotate(52deg)' }),
+      d({ left: '455px', top: '15px', width: '9px', height: '2.6px', background: red, borderRadius: '2px', transformOrigin: '50% 50%', transform: 'rotate(142deg)' }),
+      d({ left: '474px', top: '-15px', fontFamily: "'Patrick Hand', cursive", fontSize: '13px', color: red, whiteSpace: 'nowrap' }, 'retry'));
+  }
+
+  kickback() {
+    const d = this.d.bind(this);
+    const amber = '#E8C46A';
+    return d({ left: '0', top: '0', width: '536px', height: '224px' },
+      this.flowLine(this.segGeom[3], amber, 'gw-flowx 0.55s linear infinite'),
+      this.flowLine(this.segGeom[2], amber, 'gw-flowyr 0.55s linear infinite'),
+      d({ left: '464px', top: '83px', width: '9px', height: '2.6px', background: amber, borderRadius: '2px', transformOrigin: '0 50%', transform: 'rotate(-120deg)' }),
+      d({ left: '464px', top: '83px', width: '9px', height: '2.6px', background: amber, borderRadius: '2px', transformOrigin: '0 50%', transform: 'rotate(-60deg)' }),
+      d({ left: '350px', top: '172px', fontFamily: "'Patrick Hand', cursive", fontSize: '13px', color: amber, whiteSpace: 'nowrap' }, 'send back'));
+  }
+
+  seg(i, ctx) {
+    const d = this.d.bind(this);
+    const g = this.segGeom[i];
+    const status = (ctx.activeNode === i + 1 && (ctx.st === 'ok' || ctx.st === 'run')) ? 'active'
+      : ctx.doneSet.has(i + 1) ? 'done' : 'todo';
+    const chalk = '#F4EEDE';
+    const col = status === 'active' ? chalk : status === 'done' ? 'rgba(244,238,222,0.6)' : 'rgba(244,238,222,0.26)';
+    const horiz = g.dir !== 'd';
+    const grad = horiz
+      ? 'repeating-linear-gradient(90deg, ' + col + ' 0 7px, transparent 7px 14px)'
+      : 'repeating-linear-gradient(0deg, ' + col + ' 0 7px, transparent 7px 14px)';
+    const anim = status === 'active'
+      ? (g.dir === 'r' ? 'gw-flowx' : g.dir === 'l' ? 'gw-flowxr' : 'gw-flowy') + ' 0.6s linear infinite'
+      : 'none';
+    const line = horiz
+      ? d({ left: g.x + 'px', top: (g.y - 1.5) + 'px', width: g.len + 'px', height: '3px', backgroundImage: grad, backgroundSize: '14px 3px', animation: anim })
+      : d({ left: (g.x - 1.5) + 'px', top: g.y + 'px', width: '3px', height: g.len + 'px', backgroundImage: grad, backgroundSize: '3px 14px', animation: anim });
+    // arrowhead at target end
+    const ax = g.dir === 'r' ? g.x + g.len : g.dir === 'l' ? g.x : g.x;
+    const ay = g.dir === 'd' ? g.y + g.len : g.y;
+    const chev = (rot) => [
+      d({ left: '0px', top: '0px', width: '9px', height: '2.6px', background: col, borderRadius: '2px', transformOrigin: '0 50%', transform: 'rotate(' + rot[0] + 'deg)' }),
+      d({ left: '0px', top: '0px', width: '9px', height: '2.6px', background: col, borderRadius: '2px', transformOrigin: '0 50%', transform: 'rotate(' + rot[1] + 'deg)' })
+    ];
+    let arrowStyle, rots;
+    if (g.dir === 'r') { arrowStyle = { left: (ax - 1) + 'px', top: ay + 'px' }; rots = [150, 210]; }
+    else if (g.dir === 'l') { arrowStyle = { left: (ax + 1) + 'px', top: ay + 'px' }; rots = [-30, 30]; }
+    else { arrowStyle = { left: ax + 'px', top: (ay - 1) + 'px' }; rots = [240, 300]; }
+    const arrow = d(Object.assign({ width: '1px', height: '1px' }, arrowStyle), ...chev(rots));
+    return d({ left: '0', top: '0', width: '536px', height: '224px' }, line, arrow);
+  }
+
+  board(current) {
+    const d = this.d.bind(this);
+    const beats = this.beats, b = beats[current];
+    const doneSet = new Set();
+    for (let k = 0; k < current; k++) if (beats[k].st === 'ok') doneSet.add(beats[k].node);
+    const ctx = { activeNode: b.node, st: b.st, doneSet };
+    const kids = [];
+    for (let i = 0; i < 5; i++) kids.push(this.seg(i, ctx));
+    for (let i = 0; i < 6; i++) {
+      const status = i === b.node ? (b.st === 'error' ? 'err' : b.st === 'reject' ? 'rej' : 'active')
+        : doneSet.has(i) ? 'done' : 'todo';
+      kids.push(this.node(i, status));
+    }
+    if (b.arrow === 'retry') kids.push(this.retryArc());
+    if (b.arrow === 'kickback') kids.push(this.kickback());
+    return d({ left: '276px', top: '96px', width: '536px', height: '224px' }, ...kids);
+  }
+
+  // ---------- grandma (teacher with pointer) ----------
+  face(brow) {
+    const d = this.d.bind(this);
+    const skin = '#EBC9A4', line = '#6B4A35';
+    const eye = (x) => d({ left: x + 'px', top: '24px', width: '6px', height: '6px', animation: 'gw-blink 4.4s ease-in-out infinite' },
+      d({ left: '1px', top: '1px', width: '4px', height: '4px', borderRadius: '50%', background: '#3A2A1E' }));
+    return d({ position: 'relative', width: '64px', height: '60px' },
+      d({ left: '7px', top: '14px', width: '50px', height: '48px', borderRadius: '50%', background: skin }),
+      d({ left: '13px', top: '18px', width: '12px', height: '2.5px', background: line, transform: 'rotate(' + brow + 'deg)', transformOrigin: '0 50%' }),
+      d({ left: '39px', top: '18px', width: '12px', height: '2.5px', background: line, transform: 'rotate(-' + brow + 'deg)', transformOrigin: '100% 50%' }),
+      d({ left: '11px', top: '22px', width: '14px', height: '14px', borderRadius: '50%', border: '2px solid ' + line, background: 'rgba(255,255,255,0.35)' }),
+      d({ left: '39px', top: '22px', width: '14px', height: '14px', borderRadius: '50%', border: '2px solid ' + line, background: 'rgba(255,255,255,0.35)' }),
+      d({ left: '25px', top: '28px', width: '14px', height: '2px', background: line }),
+      eye(16), eye(44),
+      d({ left: '30px', top: '32px', width: '6px', height: '8px', borderRadius: '50%', background: '#D89A6E' }),
+      d({ left: '11px', top: '38px', width: '9px', height: '6px', borderRadius: '50%', background: 'rgba(206,74,56,0.26)' }),
+      d({ left: '44px', top: '38px', width: '9px', height: '6px', borderRadius: '50%', background: 'rgba(206,74,56,0.26)' }),
+      d({ left: '26px', top: '46px', width: '14px', height: '8px', borderTop: '2.5px solid ' + line, borderRadius: '50%' }));
+  }
+
+  grandma() {
+    const d = this.d.bind(this);
+    const skin = '#EBC9A4', hair = '#D8D2C8', dress = '#5E6E8A', apron = '#E8E2D6', line = '#6B4A35';
+    return d({ position: 'relative', width: '230px', height: '196px' },
+      d({ left: '40px', top: '184px', width: '150px', height: '12px', borderRadius: '50%', background: 'rgba(0,0,0,0.22)', filter: 'blur(5px)' }),
+      d({ left: '0', top: '0', width: '230px', height: '196px', animation: 'gw-breathe 3.6s ease-in-out infinite' },
+        // legs + shoes
+        d({ left: '86px', top: '162px', width: '11px', height: '20px', background: '#3A4252' }),
+        d({ left: '104px', top: '162px', width: '11px', height: '20px', background: '#3A4252' }),
+        d({ left: '80px', top: '178px', width: '23px', height: '11px', borderRadius: '7px 9px 9px 7px', background: '#2E2A36' }),
+        d({ left: '102px', top: '178px', width: '23px', height: '11px', borderRadius: '7px 9px 9px 7px', background: '#2E2A36' }),
+        // body
+        d({ left: '70px', top: '78px', width: '64px', height: '98px', borderRadius: '28px 28px 12px 12px', background: dress }),
+        d({ left: '84px', top: '100px', width: '36px', height: '76px', borderRadius: '8px', background: apron }),
+        // chalk dust on apron
+        d({ left: '92px', top: '120px', width: '5px', height: '5px', borderRadius: '50%', background: 'rgba(255,255,255,0.6)' }),
+        d({ left: '104px', top: '134px', width: '4px', height: '4px', borderRadius: '50%', background: 'rgba(255,255,255,0.5)' }),
+        // neck + collar
+        d({ left: '93px', top: '62px', width: '18px', height: '24px', borderRadius: '6px', background: skin }),
+        d({ left: '84px', top: '74px', width: '36px', height: '17px', borderRadius: '0 0 16px 16px', background: '#EFEAE0' }),
+        // left arm resting
+        d({ left: '64px', top: '108px', width: '15px', height: '44px', borderRadius: '8px', background: dress, transform: 'rotate(10deg)' }),
+        d({ left: '60px', top: '146px', width: '15px', height: '15px', borderRadius: '50%', background: skin }),
+        // right arm raised with pointer
+        d({ left: '124px', top: '104px', width: '16px', height: '52px', transformOrigin: '8px 8px', animation: 'gw-tap 2.4s ease-in-out infinite' },
+          d({ left: '1px', top: '0', width: '14px', height: '40px', borderRadius: '7px', background: dress }),
+          d({ left: '2px', top: '34px', width: '15px', height: '15px', borderRadius: '50%', background: skin }),
+          // pointer stick
+          d({ left: '8px', top: '-78px', width: '4px', height: '92px', borderRadius: '3px', background: 'linear-gradient(180deg, #C9A24B, #8A6A38)', transformOrigin: '50% 100%', transform: 'rotate(22deg)' },
+            d({ left: '-1px', top: '-4px', width: '6px', height: '7px', borderRadius: '50%', background: '#E8E2D6' }))),
+        // head
+        d({ left: '70px', top: '8px', width: '64px', height: '60px', transformOrigin: '32px 58px' },
+          d({ left: '2px', top: '6px', width: '60px', height: '56px', borderRadius: '50%', background: hair }),
+          d({ left: '22px', top: '-4px', width: '24px', height: '22px', borderRadius: '50%', background: hair }),
+          d({ left: '28px', top: '-8px', width: '12px', height: '12px', borderRadius: '50%', background: '#C7C0B6' }),
+          this.face(17))));
+  }
+
+  renderVals() {
+    const cur = this.state.step;
+    const b = this.beats[cur];
+    const dots = this.beats.map((bt, i) => ({
+      bg: i === cur ? '#34313A' : i < cur ? '#A7A2B0' : '#E4E1E8',
+      bd: i === cur ? '#34313A' : '#D2CED8',
+      go: () => this.go(i)
+    }));
+    return {
+      board: this.board(cur),
+      grandma: this.grandma(),
+      stepLabel: b.title,
+      stepCaption: b.cap,
+      stepNum: String(cur + 1),
+      total: String(this.beats.length),
+      quip: b.quip,
+      playLabel: this.state.playing ? 'Pause' : 'Play',
+      hint: this.state.playing ? 'Auto-playing \u2014 including the bits that go wrong.' : 'Paused. Use Back / Next or the dots.',
+      prev: () => this.go(cur - 1),
+      next: () => this.go(cur + 1),
+      toggle: () => this.toggle(),
+      dots
+    };
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous">
+  <link href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Text:ital,wght@0,400;0,700;1,400&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
+  <style>
+    html, body { margin: 0; padding: 0; background: #E7E2DA; }
+    @keyframes hb-blink { 0%, 92%, 100% { transform: scaleY(1); } 96% { transform: scaleY(0.12); } }
+    @keyframes hb-breathe { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-3px); } }
+    @keyframes hb-pulse { 0%, 100% { opacity: 0.5; } 50% { opacity: 1; } }
+    a { text-decoration: none; color: inherit; }
+  </style>
+</helmet>
+
+<div style="min-height: 100vh; background: radial-gradient(130% 90% at 50% 0%, #F3EBDD, #E4D8C6 60%, #C9B79E); font-family: Helvetica, Arial, sans-serif; color: #3A2F28; padding: 54px 32px 90px;">
+
+  <!-- header -->
+  <div style="max-width: 1040px; margin: 0 auto 40px; display: flex; align-items: center; gap: 22px;">
+    <div style="position: relative; width: 78px; height: 80px; flex: none; animation: hb-breathe 3.6s ease-in-out infinite;">
+      <div style="position: absolute; left: 8px; top: 6px; width: 62px; height: 60px; border-radius: 50%; background: #D5CEC3;"></div>
+      <div style="position: absolute; left: 26px; top: -2px; width: 26px; height: 24px; border-radius: 50%; background: #D5CEC3;"></div>
+      <div style="position: absolute; left: 33px; top: -7px; width: 13px; height: 13px; border-radius: 50%; background: #C4BCB0;"></div>
+      <div style="position: absolute; left: 14px; top: 14px; width: 50px; height: 50px; border-radius: 50%; background: #EBC9A4;"></div>
+      <div style="position: absolute; left: 19px; top: 20px; width: 13px; height: 13px; border-radius: 50%; border: 2px solid #6B4A35; background: rgba(255,255,255,0.4);"></div>
+      <div style="position: absolute; left: 46px; top: 20px; width: 13px; height: 13px; border-radius: 50%; border: 2px solid #6B4A35; background: rgba(255,255,255,0.4);"></div>
+      <div style="position: absolute; left: 32px; top: 25px; width: 14px; height: 2px; background: #6B4A35;"></div>
+      <div style="position: absolute; left: 17px; top: 17px; width: 13px; height: 2.6px; background: #6B4A35; transform: rotate(12deg); transform-origin: 0 50%;"></div>
+      <div style="position: absolute; left: 48px; top: 17px; width: 13px; height: 2.6px; background: #6B4A35; transform: rotate(-12deg); transform-origin: 100% 50%;"></div>
+      <div style="position: absolute; left: 23px; top: 24px; width: 5px; height: 5px; border-radius: 50%; background: #3A2A1E; animation: hb-blink 4.4s ease-in-out infinite;"></div>
+      <div style="position: absolute; left: 50px; top: 24px; width: 5px; height: 5px; border-radius: 50%; background: #3A2A1E; animation: hb-blink 4.4s ease-in-out infinite;"></div>
+      <div style="position: absolute; left: 36px; top: 32px; width: 6px; height: 8px; border-radius: 50%; background: #D89A6E;"></div>
+      <div style="position: absolute; left: 31px; top: 46px; width: 16px; height: 9px; border-top: 2.6px solid #6B4A35; border-radius: 50%;"></div>
+    </div>
+    <div>
+      <div style="font-size: 11px; letter-spacing: 2.6px; text-transform: uppercase; color: #927E63; margin-bottom: 7px;">Grumpy Grandma</div>
+      <h1 style="margin: 0 0 6px; font-family: 'Libre Caslon Text', serif; font-size: 38px; font-weight: 700; letter-spacing: -0.5px;">Grandma&rsquo;s Desktop</h1>
+      <p style="margin: 0; font-size: 14px; color: #6E5F50; max-width: 540px; line-height: 1.5;">She lives in the corner of your machine, tracking your Claude usage and grumbling about your workflow. Pick a room to visit.</p>
+    </div>
+  </div>
+
+  <!-- cards -->
+  <div style="max-width: 1040px; margin: 0 auto; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 22px;">
+
+    <!-- Live Reaction -->
+    <a href="Grandma%20Reacts.dc.html" style="display: block; background: #FFFDF9; border: 1px solid #E6DCC9; border-radius: 18px; padding: 22px; box-shadow: 0 10px 26px rgba(80,55,35,0.1); transition: transform .16s ease, box-shadow .16s ease;" style-hover="transform: translateY(-4px); box-shadow: 0 18px 38px rgba(80,55,35,0.18)">
+      <div style="position: relative; width: 54px; height: 54px; border-radius: 14px; background: linear-gradient(150deg, #E08A6F, #C75C49); margin-bottom: 16px;">
+        <div style="position: absolute; left: 13px; top: 14px; width: 8px; height: 8px; border-radius: 50%; border: 2px solid rgba(255,255,255,0.9);"></div>
+        <div style="position: absolute; left: 33px; top: 14px; width: 8px; height: 8px; border-radius: 50%; border: 2px solid rgba(255,255,255,0.9);"></div>
+        <div style="position: absolute; left: 11px; top: 9px; width: 9px; height: 2px; background: rgba(255,255,255,0.9); transform: rotate(16deg); transform-origin: 0 50%;"></div>
+        <div style="position: absolute; left: 34px; top: 9px; width: 9px; height: 2px; background: rgba(255,255,255,0.9); transform: rotate(-16deg); transform-origin: 100% 50%;"></div>
+        <div style="position: absolute; left: 19px; top: 30px; width: 16px; height: 8px; border-top: 2.4px solid rgba(255,255,255,0.95); border-radius: 50%;"></div>
+      </div>
+      <div style="font-size: 17px; font-weight: 700; margin-bottom: 5px;">Live Reaction</div>
+      <div style="font-size: 13px; color: #7A6A5A; line-height: 1.45;">She acts out your token window in real time &mdash; content, antsy, then full meltdown &mdash; with notification nudges.</div>
+      <div style="margin-top: 14px; font-size: 12px; font-weight: 700; color: #C75C49;">Open &rsaquo;</div>
+    </a>
+
+    <!-- Workshop -->
+    <a href="Grandma%20Workshop.dc.html" style="display: block; background: #FFFDF9; border: 1px solid #E6DCC9; border-radius: 18px; padding: 22px; box-shadow: 0 10px 26px rgba(80,55,35,0.1); transition: transform .16s ease, box-shadow .16s ease;" style-hover="transform: translateY(-4px); box-shadow: 0 18px 38px rgba(80,55,35,0.18)">
+      <div style="position: relative; width: 54px; height: 54px; border-radius: 14px; background: linear-gradient(150deg, #7FA9C4, #5A8FB8); margin-bottom: 16px;">
+        <div style="position: absolute; left: 11px; top: 16px; width: 14px; height: 11px; border-radius: 3px; background: rgba(255,255,255,0.92);"></div>
+        <div style="position: absolute; left: 29px; top: 16px; width: 14px; height: 11px; border-radius: 3px; background: rgba(255,255,255,0.92);"></div>
+        <div style="position: absolute; left: 9px; top: 29px; width: 18px; height: 3px; border-radius: 2px; background: rgba(255,255,255,0.6);"></div>
+        <div style="position: absolute; left: 27px; top: 29px; width: 18px; height: 3px; border-radius: 2px; background: rgba(255,255,255,0.6);"></div>
+        <div style="position: absolute; left: 15px; top: 9px; width: 6px; height: 6px; border-radius: 50%; background: rgba(255,255,255,0.9);"></div>
+        <div style="position: absolute; left: 33px; top: 9px; width: 6px; height: 6px; border-radius: 50%; background: rgba(255,255,255,0.9);"></div>
+      </div>
+      <div style="font-size: 17px; font-weight: 700; margin-bottom: 5px;">The Workshop</div>
+      <div style="font-size: 13px; color: #7A6A5A; line-height: 1.45;">A village office of grandma clerks at their desks &mdash; the manager assigns tasks and work passes down the line.</div>
+      <div style="margin-top: 14px; font-size: 12px; font-weight: 700; color: #5A8FB8;">Open &rsaquo;</div>
+    </a>
+
+    <!-- Agent Team -->
+    <a href="Grandma%20Agent%20Team.dc.html" style="display: block; background: #FFFDF9; border: 1px solid #E6DCC9; border-radius: 18px; padding: 22px; box-shadow: 0 10px 26px rgba(80,55,35,0.1); transition: transform .16s ease, box-shadow .16s ease;" style-hover="transform: translateY(-4px); box-shadow: 0 18px 38px rgba(80,55,35,0.18)">
+      <div style="position: relative; width: 54px; height: 54px; border-radius: 14px; background: linear-gradient(150deg, #9B83C6, #7D62B0); margin-bottom: 16px;">
+        <div style="position: absolute; left: 23px; top: 9px; width: 9px; height: 9px; border-radius: 50%; background: rgba(255,255,255,0.95);"></div>
+        <div style="position: absolute; left: 11px; top: 33px; width: 9px; height: 9px; border-radius: 50%; background: rgba(255,255,255,0.95);"></div>
+        <div style="position: absolute; left: 23px; top: 33px; width: 9px; height: 9px; border-radius: 50%; background: rgba(255,255,255,0.95);"></div>
+        <div style="position: absolute; left: 35px; top: 33px; width: 9px; height: 9px; border-radius: 50%; background: rgba(255,255,255,0.95);"></div>
+        <div style="position: absolute; left: 16px; top: 19px; width: 14px; height: 2px; background: rgba(255,255,255,0.6); transform: rotate(54deg); transform-origin: 0 50%;"></div>
+        <div style="position: absolute; left: 27px; top: 19px; width: 2px; height: 15px; background: rgba(255,255,255,0.6);"></div>
+        <div style="position: absolute; left: 28px; top: 19px; width: 14px; height: 2px; background: rgba(255,255,255,0.6); transform: rotate(54deg); transform-origin: 0 50%;"></div>
+      </div>
+      <div style="font-size: 17px; font-weight: 700; margin-bottom: 5px;">The Agent Team</div>
+      <div style="font-size: 13px; color: #7A6A5A; line-height: 1.45;">A realistic run: orchestrator, leads and sub-agents as a tree &mdash; plus a timeline with per-agent token costs.</div>
+      <div style="margin-top: 14px; font-size: 12px; font-weight: 700; color: #7D62B0;">Open &rsaquo;</div>
+    </a>
+
+    <!-- Workflow -->
+    <a href="Grandma%20Workflow.dc.html" style="display: block; background: #FFFDF9; border: 1px solid #E6DCC9; border-radius: 18px; padding: 22px; box-shadow: 0 10px 26px rgba(80,55,35,0.1); transition: transform .16s ease, box-shadow .16s ease;" style-hover="transform: translateY(-4px); box-shadow: 0 18px 38px rgba(80,55,35,0.18)">
+      <div style="position: relative; width: 54px; height: 54px; border-radius: 14px; background: linear-gradient(150deg, #6E8A6E, #4E6E50); margin-bottom: 16px;">
+        <div style="position: absolute; left: 9px; top: 11px; width: 36px; height: 26px; border-radius: 4px; background: #2E3A2E; border: 2px solid rgba(255,255,255,0.55);"></div>
+        <div style="position: absolute; left: 14px; top: 17px; width: 20px; height: 2px; border-radius: 1px; background: rgba(255,255,255,0.75);"></div>
+        <div style="position: absolute; left: 14px; top: 23px; width: 26px; height: 2px; border-radius: 1px; background: rgba(255,255,255,0.55);"></div>
+        <div style="position: absolute; left: 14px; top: 29px; width: 15px; height: 2px; border-radius: 1px; background: rgba(255,255,255,0.55);"></div>
+      </div>
+      <div style="font-size: 17px; font-weight: 700; margin-bottom: 5px;">The Workflow</div>
+      <div style="font-size: 13px; color: #7A6A5A; line-height: 1.45;">Grandma at the chalkboard, explaining how a coding agent really works &mdash; retries, rejections and all.</div>
+      <div style="margin-top: 14px; font-size: 12px; font-weight: 700; color: #4E6E50;">Open &rsaquo;</div>
+    </a>
+
+    <!-- Session Feed -->
+    <a href="Grandma%20Session%20Feed.dc.html" style="display: block; background: #FFFDF9; border: 1px solid #E6DCC9; border-radius: 18px; padding: 22px; box-shadow: 0 10px 26px rgba(80,55,35,0.1); transition: transform .16s ease, box-shadow .16s ease;" style-hover="transform: translateY(-4px); box-shadow: 0 18px 38px rgba(80,55,35,0.18)">
+      <div style="position: relative; width: 54px; height: 54px; border-radius: 14px; background: linear-gradient(150deg, #4A5163, #2E3340); margin-bottom: 16px;">
+        <div style="position: absolute; left: 11px; top: 14px; width: 6px; height: 6px; border-radius: 50%; background: #5FA552;"></div>
+        <div style="position: absolute; left: 21px; top: 15px; width: 22px; height: 3px; border-radius: 2px; background: rgba(255,255,255,0.7);"></div>
+        <div style="position: absolute; left: 11px; top: 25px; width: 6px; height: 6px; border-radius: 50%; background: #E2B458;"></div>
+        <div style="position: absolute; left: 21px; top: 26px; width: 16px; height: 3px; border-radius: 2px; background: rgba(255,255,255,0.5);"></div>
+        <div style="position: absolute; left: 11px; top: 36px; width: 6px; height: 6px; border-radius: 50%; background: #5A93C8; animation: hb-pulse 1.4s ease-in-out infinite;"></div>
+        <div style="position: absolute; left: 21px; top: 37px; width: 20px; height: 3px; border-radius: 2px; background: rgba(255,255,255,0.6);"></div>
+      </div>
+      <div style="font-size: 17px; font-weight: 700; margin-bottom: 5px;">The Session Feed</div>
+      <div style="font-size: 13px; color: #7A6A5A; line-height: 1.45;">A live log of what the agent is doing &mdash; every read, edit, test and sub-agent &mdash; with her reading over your shoulder.</div>
+      <div style="margin-top: 14px; font-size: 12px; font-weight: 700; color: #4A5163;">Open &rsaquo;</div>
+    </a>
+
+    <!-- World -->
+    <a href="Grandmas%20of%20the%20World.dc.html" style="display: block; background: #FFFDF9; border: 1px solid #E6DCC9; border-radius: 18px; padding: 22px; box-shadow: 0 10px 26px rgba(80,55,35,0.1); transition: transform .16s ease, box-shadow .16s ease;" style-hover="transform: translateY(-4px); box-shadow: 0 18px 38px rgba(80,55,35,0.18)">
+      <div style="position: relative; width: 54px; height: 54px; border-radius: 14px; background: linear-gradient(150deg, #D99A6A, #BE6F44); margin-bottom: 16px;">
+        <div style="position: absolute; left: 15px; top: 13px; width: 24px; height: 24px; border-radius: 50%; border: 2.4px solid rgba(255,255,255,0.92);"></div>
+        <div style="position: absolute; left: 26px; top: 13px; width: 2px; height: 24px; background: rgba(255,255,255,0.7);"></div>
+        <div style="position: absolute; left: 15px; top: 24px; width: 24px; height: 2px; background: rgba(255,255,255,0.7);"></div>
+        <div style="position: absolute; left: 18px; top: 17px; width: 18px; height: 16px; border-radius: 50%; border: 2px solid rgba(255,255,255,0.5); border-top: none; border-bottom: none;"></div>
+      </div>
+      <div style="font-size: 17px; font-weight: 700; margin-bottom: 5px;">Grandmas of the World</div>
+      <div style="font-size: 13px; color: #7A6A5A; line-height: 1.45;">Eight grandmas, eight cultures &mdash; each tracking the same usage through her own kitchen and mother tongue.</div>
+      <div style="margin-top: 14px; font-size: 12px; font-weight: 700; color: #BE6F44;">Open &rsaquo;</div>
+    </a>
+
+    <!-- Decision Briefs -->
+    <a href="Grandma%20Briefs.dc.html" style="display: block; background: #FFFDF9; border: 1px solid #E6DCC9; border-radius: 18px; padding: 22px; box-shadow: 0 10px 26px rgba(80,55,35,0.1); transition: transform .16s ease, box-shadow .16s ease;" style-hover="transform: translateY(-4px); box-shadow: 0 18px 38px rgba(80,55,35,0.18)">
+      <div style="position: relative; width: 54px; height: 54px; border-radius: 14px; background: linear-gradient(150deg, #E0B45C, #C8902E); margin-bottom: 16px;">
+        <div style="position: absolute; left: 15px; top: 11px; width: 24px; height: 32px; border-radius: 3px; background: rgba(255,255,255,0.92);"></div>
+        <div style="position: absolute; left: 19px; top: 17px; width: 16px; height: 2px; border-radius: 1px; background: #C8902E;"></div>
+        <div style="position: absolute; left: 19px; top: 22px; width: 16px; height: 2px; border-radius: 1px; background: rgba(200,144,46,0.5);"></div>
+        <div style="position: absolute; left: 19px; top: 27px; width: 10px; height: 2px; border-radius: 1px; background: rgba(200,144,46,0.5);"></div>
+        <div style="position: absolute; left: 28px; top: 30px; width: 15px; height: 15px; border-radius: 50%; background: #B23A2E; border: 2px solid #FFFDF9;"></div>
+        <div style="position: absolute; left: 32px; top: 35px; width: 6px; height: 4px; border-left: 2px solid #FFFFFF; border-bottom: 2px solid #FFFFFF; transform: rotate(-45deg);"></div>
+      </div>
+      <div style="font-size: 17px; font-weight: 700; margin-bottom: 5px;">Decision Briefs</div>
+      <div style="font-size: 13px; color: #7A6A5A; line-height: 1.45;">When Claude pauses for a call from you &mdash; a queue of briefs with age badges that get crosser the longer they sit.</div>
+      <div style="margin-top: 14px; font-size: 12px; font-weight: 700; color: #C8902E;">Open &rsaquo;</div>
+    </a>
+
+    <!-- The Ledger -->
+    <a href="Grandma%20Ledger.dc.html" style="display: block; background: #FFFDF9; border: 1px solid #E6DCC9; border-radius: 18px; padding: 22px; box-shadow: 0 10px 26px rgba(80,55,35,0.1); transition: transform .16s ease, box-shadow .16s ease;" style-hover="transform: translateY(-4px); box-shadow: 0 18px 38px rgba(80,55,35,0.18)">
+      <div style="position: relative; width: 54px; height: 54px; border-radius: 14px; background: linear-gradient(150deg, #A77E4E, #835C38); margin-bottom: 16px;">
+        <div style="position: absolute; left: 13px; bottom: 12px; width: 7px; height: 16px; border-radius: 2px; background: rgba(255,255,255,0.65);"></div>
+        <div style="position: absolute; left: 23px; bottom: 12px; width: 7px; height: 26px; border-radius: 2px; background: rgba(255,255,255,0.92);"></div>
+        <div style="position: absolute; left: 33px; bottom: 12px; width: 7px; height: 20px; border-radius: 2px; background: rgba(255,255,255,0.78);"></div>
+        <div style="position: absolute; left: 11px; bottom: 10px; width: 32px; height: 2px; border-radius: 1px; background: rgba(255,255,255,0.6);"></div>
+      </div>
+      <div style="font-size: 17px; font-weight: 700; margin-bottom: 5px;">The Ledger</div>
+      <div style="font-size: 13px; color: #7A6A5A; line-height: 1.45;">A week of usage tallied per day and per sub-agent &mdash; with a running &ldquo;top offenders&rdquo; ranking she never forgets.</div>
+      <div style="margin-top: 14px; font-size: 12px; font-weight: 700; color: #835C38;">Open &rsaquo;</div>
+    </a>
+
+  </div>
+
+  <div style="max-width: 1040px; margin: 34px auto 0; text-align: center; font-family: 'Libre Caslon Text', serif; font-style: italic; font-size: 13px; color: #8A7660;">&ldquo;One desktop, one very opinionated grandmother. Mind the token bill, dear.&rdquo;</div>
+</div>
+</x-dc>
+</body>
+</html>

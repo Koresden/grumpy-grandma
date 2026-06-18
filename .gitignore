@@ -1,0 +1,25 @@
+# dependencies
+node_modules/
+
+# build output
+app/dist/
+app/src-tauri/target/
+
+# bundled Node runtime — 115MB, exceeds GitHub's 100MB file limit.
+# Re-fetch with app/src-tauri/binaries/fetch-node.sh (see README / ARCHITECTURE).
+app/src-tauri/binaries/node-*
+
+# design source archives (the unpacked bundle lives in design/)
+*.zip
+
+# macOS
+.DS_Store
+
+# logs
+*.log
+
+# transcript backups dumped by the Stop hook — contain real conversation content
+conversations/
+
+# local editor/permission settings
+.claude/settings.local.json

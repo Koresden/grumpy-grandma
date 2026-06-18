@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous">
+  <link href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Text:ital@0;1&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    html, body { margin: 0; padding: 0; background: #C9CCD4; }
+    @keyframes sf-blink { 0%, 92%, 100% { transform: scaleY(1); } 96% { transform: scaleY(0.1); } }
+    @keyframes sf-breathe { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-2.5px); } }
+    @keyframes sf-in { from { transform: translateY(-7px); opacity: 0.4; } to { transform: translateY(0); opacity: 1; } }
+    @keyframes sf-spin { to { transform: rotate(360deg); } }
+    @keyframes sf-pulse { 0%, 100% { opacity: 0.4; } 50% { opacity: 1; } }
+    @keyframes sf-bar { 0% { transform: scaleX(0.2); } 50% { transform: scaleX(1); } 100% { transform: scaleX(0.2); } }
+  </style>
+</helmet>
+
+<div style="min-height: 100vh; background: #C9CCD4; font-family: Helvetica, Arial, sans-serif; color: #2B2930; padding: 30px 30px 64px;">
+
+  <div style="max-width: 1000px; margin: 0 auto 22px;">
+    <div style="font-size: 11px; letter-spacing: 2.5px; text-transform: uppercase; color: #7C7986; margin-bottom: 9px;">Grumpy Grandma · Live session feed</div>
+    <h1 style="margin: 0 0 6px; font-size: 27px; font-weight: 700; letter-spacing: -0.5px;">She reads the feed over your shoulder</h1>
+    <p style="margin: 0; font-size: 13.5px; color: #5E5B66; max-width: 600px; line-height: 1.5;">A live stream of what the agent is doing right now &mdash; every tool call, file edit and sub-agent &mdash; with Grandma narrating from the corner. New rows tick in on their own.</p>
+  </div>
+
+  <!-- DESKTOP SCENE -->
+  <div style="max-width: 1000px; margin: 0 auto; position: relative; height: 540px; border-radius: 16px; overflow: hidden; background: linear-gradient(160deg, #6E7CA8, #8E7FA0 50%, #B98C86); box-shadow: 0 18px 44px rgba(40,30,50,0.26);">
+    <div style="position: absolute; top: 0; left: 0; right: 0; height: 26px; background: rgba(255,255,255,0.2); backdrop-filter: blur(10px); display: flex; align-items: center; justify-content: space-between; padding: 0 15px; font-size: 12px; color: rgba(40,30,40,0.85); z-index: 6;">
+      <div style="display: flex; gap: 16px;"><span style="font-weight: 700;">🍎 Grandma</span><span>File</span><span>Edit</span><span>View</span><span>Window</span></div>
+      <span>Sat 11:38 AM</span>
+    </div>
+
+    <!-- FEED WINDOW -->
+    <div style="position: absolute; top: 44px; right: 26px; width: 470px; bottom: 26px; background: #15171D; border-radius: 13px; overflow: hidden; box-shadow: 0 22px 50px rgba(20,20,45,0.42); display: flex; flex-direction: column;">
+      <!-- titlebar -->
+      <div style="height: 38px; background: #1E212A; display: flex; align-items: center; padding: 0 13px; gap: 8px; flex: none;">
+        <div style="width: 11px; height: 11px; border-radius: 50%; background: #E0604F;"></div>
+        <div style="width: 11px; height: 11px; border-radius: 50%; background: #DBA63E;"></div>
+        <div style="width: 11px; height: 11px; border-radius: 50%; background: #5FA552;"></div>
+        <span style="margin-left: 8px; font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: #8089A0;">session.log</span>
+        <div style="margin-left: auto; display: flex; align-items: center; gap: 6px;">
+          <div style="width: 7px; height: 7px; border-radius: 50%; background: #5FA552; animation: sf-pulse 1.4s ease-in-out infinite;"></div>
+          <span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: #6E7686;">live</span>
+        </div>
+      </div>
+      <!-- session summary -->
+      <div style="flex: none; padding: 11px 15px; border-bottom: 1px solid rgba(255,255,255,0.06); display: flex; gap: 18px; align-items: center;">
+        <div>
+          <div style="font-family: 'IBM Plex Mono', monospace; font-size: 13px; color: #D8DCE4; font-weight: 600;">auth-refactor</div>
+          <div style="font-family: 'IBM Plex Mono', monospace; font-size: 10.5px; color: #6E7686;">project · 14 turns</div>
+        </div>
+        <div style="margin-left: auto; display: flex; gap: 16px;">
+          <div style="text-align: right;"><div style="font-family: 'IBM Plex Mono', monospace; font-size: 13px; color: #E2B458; font-weight: 600;">{{ tokens }}</div><div style="font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; color: #6E7686;">tokens</div></div>
+          <div style="text-align: right;"><div style="font-family: 'IBM Plex Mono', monospace; font-size: 13px; color: #E2B458; font-weight: 600;">{{ cost }}</div><div style="font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; color: #6E7686;">cost</div></div>
+        </div>
+      </div>
+      <!-- the feed -->
+      <div style="flex: 1; overflow: hidden; padding: 8px 0; position: relative;">
+        {{ feed }}
+        <div style="position: absolute; left: 0; right: 0; bottom: 0; height: 40px; background: linear-gradient(180deg, transparent, #15171D);"></div>
+      </div>
+      <!-- working line -->
+      <div style="flex: none; padding: 10px 15px; border-top: 1px solid rgba(255,255,255,0.06); display: flex; align-items: center; gap: 9px;">
+        <div style="width: 13px; height: 13px; border-radius: 50%; border: 2px solid #5FA552; border-top-color: transparent; animation: sf-spin 0.8s linear infinite;"></div>
+        <span style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: #9BA3AF;">{{ working }}</span>
+        <div style="margin-left: auto; display: flex; gap: 3px; align-items: flex-end; height: 13px;">
+          <div style="width: 3px; height: 100%; background: #3A4150; transform-origin: bottom; animation: sf-bar 0.9s ease-in-out infinite;"></div>
+          <div style="width: 3px; height: 100%; background: #3A4150; transform-origin: bottom; animation: sf-bar 0.9s ease-in-out infinite 0.15s;"></div>
+          <div style="width: 3px; height: 100%; background: #3A4150; transform-origin: bottom; animation: sf-bar 0.9s ease-in-out infinite 0.3s;"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- GRANDMA -->
+    <div style="position: absolute; left: 22px; bottom: 0;">
+      <div style="position: absolute; left: 4px; bottom: 200px; width: 218px; background: #F6EFDD; border: 1px solid #E2D6BC; border-radius: 13px; padding: 10px 13px; box-shadow: 0 8px 22px rgba(0,0,0,0.26); font-family: 'Libre Caslon Text', serif; font-style: italic; font-size: 13px; line-height: 1.4; color: #5C4A38; z-index: 4;">
+        {{ quip }}
+        <div style="position: absolute; left: 40px; bottom: -8px; width: 14px; height: 14px; background: #F6EFDD; border-right: 1px solid #E2D6BC; border-bottom: 1px solid #E2D6BC; transform: rotate(45deg);"></div>
+      </div>
+      {{ grandma }}
+    </div>
+  </div>
+
+  <!-- CONTROLS -->
+  <div style="max-width: 1000px; margin: 16px auto 0; display: flex; align-items: center; gap: 14px; flex-wrap: wrap;">
+    <div onClick="{{ toggle }}" style="cursor: pointer; padding: 9px 18px; border-radius: 10px; font-size: 13px; font-weight: 700; background: #34313A; color: #FFFFFF; box-shadow: 0 3px 10px rgba(40,30,50,0.16);">{{ playLabel }}</div>
+    <div onClick="{{ step }}" style="cursor: pointer; padding: 9px 16px; border-radius: 10px; font-size: 13px; font-weight: 600; background: #FFFFFF; color: #4A4654; box-shadow: 0 3px 10px rgba(40,30,50,0.1);">Step +1</div>
+    <div onClick="{{ clear }}" style="cursor: pointer; padding: 9px 16px; border-radius: 10px; font-size: 13px; font-weight: 600; background: #FFFFFF; color: #4A4654; box-shadow: 0 3px 10px rgba(40,30,50,0.1);">Restart</div>
+    <span style="margin-left: auto; font-size: 12px; color: #8A8590; font-family: 'Libre Caslon Text', serif; font-style: italic;">{{ hint }}</span>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;: {&quot;width&quot;: 1000, &quot;height&quot;: 720}}">
+class Component extends DCLogic {
+  state = { count: 3, playing: true, tokens: 0.42 };
+
+  // the scripted session: each entry = one feed row
+  script = [
+    { kind: 'user', label: 'You', text: 'Refactor the auth flow to use the new token service', cost: 0 },
+    { kind: 'think', label: 'Thinking', text: 'mapping out the call sites before touching anything', cost: 18 },
+    { kind: 'plan', label: 'Plan', text: '4 tasks \u00b7 read \u2192 edit \u2192 test \u2192 verify', cost: 12 },
+    { kind: 'read', label: 'Read', text: 'src/auth/session.ts', cost: 9 },
+    { kind: 'grep', label: 'Search', text: 'getToken( \u2014 11 matches in 6 files', cost: 7 },
+    { kind: 'read', label: 'Read', text: 'src/auth/middleware.ts', cost: 8 },
+    { kind: 'edit', label: 'Edit', text: 'session.ts \u00b7 +24 \u221218 lines', cost: 22 },
+    { kind: 'edit', label: 'Edit', text: 'middleware.ts \u00b7 +9 \u22123 lines', cost: 14 },
+    { kind: 'tool', label: 'Run', text: 'npm test \u2014 auth suite', cost: 16 },
+    { kind: 'error', label: 'Failed', text: '2 tests red \u00b7 expired-token case', cost: 5 },
+    { kind: 'edit', label: 'Edit', text: 'session.ts \u00b7 patch refresh guard', cost: 19 },
+    { kind: 'tool', label: 'Run', text: 'npm test \u2014 auth suite', cost: 16 },
+    { kind: 'ok', label: 'Passed', text: 'all 38 tests green', cost: 4 },
+    { kind: 'fork', label: 'Sub-agent', text: 'forked verifier \u00b7 reviewing diff', cost: 28 },
+    { kind: 'ok', label: 'Verified', text: 'no regressions \u00b7 looks clean', cost: 6 },
+    { kind: 'done', label: 'Delivered', text: 'auth flow migrated \u2014 ready for review', cost: 3 }
+  ];
+
+  quips = {
+    user: 'Another \u201Cquick\u201D job. We\u2019ll see.',
+    think: 'Staring into space. That\u2019s called \u201Cthinking\u201D now.',
+    plan: 'A four-item list. Hold the applause.',
+    read: 'Reading the same file twice. Pay attention the FIRST time.',
+    grep: 'Eleven matches. You made eleven messes, dear.',
+    edit: 'Snip, snip. I hope you\u2019re keeping the offcuts.',
+    tool: 'Running tests. Cross your fingers, why don\u2019t you.',
+    error: 'FAILED. I told you. I always tell you.',
+    ok: 'Green at last. Don\u2019t let it go to your head.',
+    fork: 'Hired ANOTHER one. The tokens! My word, the tokens.',
+    done: 'Finished. Now close the laptop and water my ferns.'
+  };
+
+  componentDidMount() { this.startTimer(); }
+  componentWillUnmount() { clearInterval(this.timer); }
+
+  startTimer() {
+    clearInterval(this.timer);
+    this.timer = setInterval(() => {
+      if (this.state.playing) this.advance();
+    }, 2100);
+  }
+
+  advance() {
+    this.setState((s) => {
+      if (s.count >= this.script.length) return { playing: false };
+      const justAdded = this.script[s.count];
+      return { count: s.count + 1, tokens: +(s.tokens + (justAdded.cost / 1000) + 0.004).toFixed(3) };
+    });
+  }
+
+  toggle() {
+    this.setState((s) => {
+      if (s.count >= this.script.length) return { playing: true, count: 3, tokens: 0.42 };
+      return { playing: !s.playing };
+    });
+    this.startTimer();
+  }
+
+  restart() { this.setState({ count: 3, playing: true, tokens: 0.42 }); this.startTimer(); }
+
+  d(style, ...kids) {
+    return React.createElement('div', { style: Object.assign({ position: 'absolute' }, style) }, ...kids);
+  }
+
+  rowStyle(kind) {
+    const m = {
+      user: { dot: '#6E8AE0', tag: '#9DB2EE', mono: false },
+      think: { dot: '#8A6ED0', tag: '#B49EE6', mono: false },
+      plan: { dot: '#C58AE0', tag: '#D6AEEC', mono: false },
+      read: { dot: '#5A93C8', tag: '#86B4DC', mono: true },
+      grep: { dot: '#5A93C8', tag: '#86B4DC', mono: true },
+      edit: { dot: '#5FA57E', tag: '#8FC8A8', mono: true },
+      tool: { dot: '#C9A24B', tag: '#E2C77E', mono: true },
+      error: { dot: '#E0604F', tag: '#F0907E', mono: false },
+      ok: { dot: '#5FA552', tag: '#8FCB82', mono: false },
+      fork: { dot: '#C58A4A', tag: '#E2B074', mono: false },
+      done: { dot: '#5FA552', tag: '#9BD68E', mono: false },
+      verified: { dot: '#5FA552', tag: '#9BD68E', mono: false }
+    };
+    return m[kind] || m.read;
+  }
+
+  iconFor(kind, col) {
+    const d = this.d.bind(this);
+    const box = { position: 'relative', width: '15px', height: '15px', flex: 'none' };
+    if (kind === 'error') return d(box,
+      d({ left: '0', top: '6px', width: '15px', height: '3px', background: col, borderRadius: '2px', transform: 'rotate(45deg)' }),
+      d({ left: '0', top: '6px', width: '15px', height: '3px', background: col, borderRadius: '2px', transform: 'rotate(-45deg)' }));
+    if (kind === 'ok' || kind === 'done' || kind === 'verified') return d(box,
+      d({ left: '2px', top: '4px', width: '7px', height: '4px', borderLeft: '3px solid ' + col, borderBottom: '3px solid ' + col, transform: 'rotate(-45deg)' }));
+    if (kind === 'fork') return d(box,
+      d({ left: '1px', top: '1px', width: '5px', height: '5px', borderRadius: '50%', border: '2px solid ' + col }),
+      d({ left: '9px', top: '1px', width: '5px', height: '5px', borderRadius: '50%', border: '2px solid ' + col }),
+      d({ left: '4px', top: '9px', width: '5px', height: '5px', borderRadius: '50%', border: '2px solid ' + col }),
+      d({ left: '5px', top: '5px', width: '2px', height: '5px', background: col, transform: 'rotate(34deg)' }),
+      d({ left: '8px', top: '5px', width: '2px', height: '5px', background: col, transform: 'rotate(-34deg)' }));
+    // generic dot-square
+    return d(box, d({ left: '3px', top: '3px', width: '9px', height: '9px', borderRadius: '3px', border: '2px solid ' + col }));
+  }
+
+  feed() {
+    const d = this.d.bind(this);
+    const rows = this.script.slice(0, this.state.count);
+    const shown = rows.slice(-8);
+    const offset = rows.length - shown.length;
+    const items = shown.map((r, idx) => {
+      const real = offset + idx;
+      const s = this.rowStyle(r.kind);
+      const isLast = real === rows.length - 1;
+      const t = '11:' + (32 + Math.floor(real * 0.6)).toString().padStart(2, '0');
+      return d({ position: 'relative', display: 'flex', alignItems: 'flex-start', gap: '10px', padding: '6px 16px',
+          animation: isLast ? 'sf-in 0.32s ease-out' : 'none', opacity: 1 },
+        d({ position: 'relative', width: '15px', height: '15px', flex: 'none', marginTop: '1px' }, this.iconFor(r.kind, s.dot)),
+        d({ position: 'relative', flex: '1', minWidth: '0' },
+          d({ position: 'relative', display: 'flex', alignItems: 'baseline', gap: '8px' },
+            d({ position: 'relative', fontFamily: "'IBM Plex Mono', monospace", fontSize: '11px', fontWeight: '600', color: s.tag, letterSpacing: '0.3px' }, r.label),
+            d({ position: 'relative', fontFamily: "'IBM Plex Mono', monospace", fontSize: '9.5px', color: '#5A6172' }, t)),
+          d({ position: 'relative', fontFamily: s.mono ? "'IBM Plex Mono', monospace" : 'Helvetica, Arial, sans-serif',
+              fontSize: s.mono ? '12px' : '12.5px', color: '#C2C8D2', lineHeight: '1.35', marginTop: '2px',
+              fontStyle: r.kind === 'user' ? 'normal' : 'normal' }, r.text)),
+        r.kind === 'edit' ? d({ position: 'relative', fontFamily: "'IBM Plex Mono', monospace", fontSize: '10px', color: '#5FA57E', flex: 'none', marginTop: '2px' }, '\u25CF') : null);
+    });
+    return d({ position: 'absolute', inset: '0', display: 'flex', flexDirection: 'column', justifyContent: 'flex-end', paddingBottom: '6px' }, ...items);
+  }
+
+  // ---------- grandma ----------
+  face(brow) {
+    const d = this.d.bind(this);
+    const skin = '#EBC9A4', line = '#6B4A35';
+    const eye = (x) => d({ left: x + 'px', top: '24px', width: '6px', height: '6px', animation: 'sf-blink 4.4s ease-in-out infinite' },
+      d({ left: '1px', top: '1px', width: '4px', height: '4px', borderRadius: '50%', background: '#3A2A1E' }));
+    return d({ position: 'relative', width: '64px', height: '60px' },
+      d({ left: '7px', top: '14px', width: '50px', height: '48px', borderRadius: '50%', background: skin }),
+      d({ left: '13px', top: '18px', width: '12px', height: '2.5px', background: line, transform: 'rotate(' + brow + 'deg)', transformOrigin: '0 50%' }),
+      d({ left: '39px', top: '18px', width: '12px', height: '2.5px', background: line, transform: 'rotate(-' + brow + 'deg)', transformOrigin: '100% 50%' }),
+      d({ left: '11px', top: '22px', width: '14px', height: '14px', borderRadius: '50%', border: '2px solid ' + line, background: 'rgba(255,255,255,0.35)' }),
+      d({ left: '39px', top: '22px', width: '14px', height: '14px', borderRadius: '50%', border: '2px solid ' + line, background: 'rgba(255,255,255,0.35)' }),
+      d({ left: '25px', top: '28px', width: '14px', height: '2px', background: line }),
+      eye(16), eye(44),
+      d({ left: '30px', top: '32px', width: '6px', height: '8px', borderRadius: '50%', background: '#D89A6E' }),
+      d({ left: '11px', top: '38px', width: '9px', height: '6px', borderRadius: '50%', background: 'rgba(206,74,56,0.26)' }),
+      d({ left: '44px', top: '38px', width: '9px', height: '6px', borderRadius: '50%', background: 'rgba(206,74,56,0.26)' }),
+      d({ left: '26px', top: '46px', width: '14px', height: '8px', borderTop: '2.5px solid ' + line, borderRadius: '50%' }));
+  }
+
+  grandma() {
+    const d = this.d.bind(this);
+    const skin = '#EBC9A4', hair = '#D8D2C8', dress = '#7A5C84', apron = '#ECE4D6';
+    return d({ position: 'relative', width: '210px', height: '200px' },
+      d({ left: '34px', top: '188px', width: '140px', height: '12px', borderRadius: '50%', background: 'rgba(0,0,0,0.22)', filter: 'blur(5px)' }),
+      d({ left: '0', top: '0', width: '210px', height: '200px', animation: 'sf-breathe 3.6s ease-in-out infinite' },
+        d({ left: '82px', top: '166px', width: '11px', height: '20px', background: '#E0D6C4' }),
+        d({ left: '100px', top: '166px', width: '11px', height: '20px', background: '#E0D6C4' }),
+        d({ left: '76px', top: '182px', width: '23px', height: '11px', borderRadius: '7px 9px 9px 7px', background: '#4A4250' }),
+        d({ left: '98px', top: '182px', width: '23px', height: '11px', borderRadius: '7px 9px 9px 7px', background: '#4A4250' }),
+        d({ left: '66px', top: '80px', width: '64px', height: '100px', borderRadius: '28px 28px 12px 12px', background: dress }),
+        d({ left: '80px', top: '104px', width: '36px', height: '76px', borderRadius: '8px', background: apron }),
+        d({ left: '89px', top: '64px', width: '18px', height: '24px', borderRadius: '6px', background: skin }),
+        d({ left: '80px', top: '76px', width: '36px', height: '17px', borderRadius: '0 0 16px 16px', background: '#EFEAE0' }),
+        // arms folded across
+        d({ left: '64px', top: '120px', width: '70px', height: '15px', borderRadius: '8px', background: dress }),
+        d({ left: '60px', top: '124px', width: '15px', height: '15px', borderRadius: '50%', background: skin }),
+        d({ left: '124px', top: '124px', width: '15px', height: '15px', borderRadius: '50%', background: skin }),
+        // spectacle chain
+        d({ left: '70px', top: '52px', width: '60px', height: '60px', transformOrigin: '32px 58px' },
+          d({ left: '2px', top: '6px', width: '60px', height: '56px', borderRadius: '50%', background: hair }),
+          d({ left: '22px', top: '-4px', width: '24px', height: '22px', borderRadius: '50%', background: hair }),
+          d({ left: '28px', top: '-8px', width: '12px', height: '12px', borderRadius: '50%', background: '#C7C0B6' }),
+          this.face(15))));
+  }
+
+  renderVals() {
+    const s = this.state;
+    const last = this.script[Math.min(s.count, this.script.length) - 1] || this.script[0];
+    const ended = s.count >= this.script.length;
+    const workingMap = {
+      user: 'reading your request\u2026', think: 'thinking it through\u2026', plan: 'drawing up a plan\u2026',
+      read: 'reading files\u2026', grep: 'searching the codebase\u2026', edit: 'applying an edit\u2026',
+      tool: 'running the test suite\u2026', error: 'inspecting the failure\u2026', ok: 'moving on\u2026',
+      fork: 'waiting on the sub-agent\u2026', done: 'wrapping up\u2026'
+    };
+    return {
+      feed: this.feed(),
+      grandma: this.grandma(),
+      quip: this.quips[last.kind] || '\u2026',
+      tokens: s.tokens.toFixed(2) + 'M',
+      cost: '$' + (s.tokens * 6.1).toFixed(2),
+      working: ended ? 'session idle \u2014 nothing running' : (workingMap[last.kind] || 'working\u2026'),
+      playLabel: ended ? 'Replay' : (s.playing ? 'Pause' : 'Play'),
+      hint: ended ? 'Session complete. She\u2019s gone to put the kettle on.' : (s.playing ? 'Streaming live \u2014 new rows tick in every couple seconds.' : 'Paused. Use Step +1 to advance one row.'),
+      toggle: () => this.toggle(),
+      step: () => this.advance(),
+      clear: () => this.restart()
+    };
+  }
+}
+</script>
+</body>
+</html>

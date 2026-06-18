@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous">
+  <link href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Text:ital@0;1&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+  <style>
+    html, body { margin: 0; padding: 0; background: #C9CCD4; }
+    @keyframes wk-blink { 0%, 92%, 100% { transform: scaleY(1); } 96% { transform: scaleY(0.12); } }
+    @keyframes wk-breathe { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-2.5px); } }
+    @keyframes wk-bob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
+    @keyframes wk-antenna { 0%, 100% { transform: rotate(-7deg); } 50% { transform: rotate(7deg); } }
+    @keyframes wk-flip { 0%, 100% { transform: rotateY(0deg); } 50% { transform: rotateY(-72deg); } }
+    @keyframes wk-hammer { 0%, 60%, 100% { transform: rotate(-8deg); } 78% { transform: rotate(34deg); } }
+    @keyframes wk-shake { 0% { transform: rotate(-15deg); } 50% { transform: rotate(15deg); } 100% { transform: rotate(-15deg); } }
+    @keyframes wk-scan { 0%, 100% { transform: translate(0,0); } 50% { transform: translate(13px,7px); } }
+    @keyframes wk-shim { 0% { transform: translateX(-100%); } 100% { transform: translateX(320%); } }
+    @keyframes wk-glow { 0%, 100% { box-shadow: 0 0 0 0 rgba(255,240,210,0); } 50% { box-shadow: 0 0 22px 2px rgba(255,240,210,0.4); } }
+    @keyframes wk-dash { to { background-position-x: 16px; } }
+    @keyframes wk-pulse { 0%, 100% { opacity: 0.45; } 50% { opacity: 1; } }
+    @keyframes wk-spark { 0% { transform: scale(0.3); opacity: 0; } 40% { opacity: 1; } 100% { transform: scale(1.1) translateY(-9px); opacity: 0; } }
+  </style>
+</helmet>
+
+<div style="min-height: 100vh; background: #C9CCD4; font-family: Helvetica, Arial, sans-serif; color: #2B2930; padding: 30px 30px 64px;">
+
+  <div style="max-width: 1000px; margin: 0 auto 22px;">
+    <div style="font-size: 11px; letter-spacing: 2.5px; text-transform: uppercase; color: #7C7986; margin-bottom: 9px;">Grumpy Grandma · The office</div>
+    <h1 style="margin: 0 0 6px; font-size: 27px; font-weight: 700; letter-spacing: -0.5px;">She runs an office of village grandmas</h1>
+    <p style="margin: 0; font-size: 13.5px; color: #5E5B66; max-width: 600px; line-height: 1.5;">The orchestrator hands work to her neighbours &mdash; fellow grandmas from the same village, each a clerk at her own desk. Grandma, the office manager, assigns every task and disapproves of all of them at once. Click a neighbour to check on her.</p>
+  </div>
+
+  <!-- DESKTOP SCENE -->
+  <div style="max-width: 1000px; margin: 0 auto; position: relative; height: 548px; border-radius: 16px; overflow: hidden; background: linear-gradient(180deg, #DEE3EB, #CAD1DC); box-shadow: 0 18px 44px rgba(40,30,50,0.26);">
+    <!-- menu bar -->
+    <div style="position: absolute; top: 0; left: 0; right: 0; height: 26px; background: rgba(255,255,255,0.24); backdrop-filter: blur(10px); display: flex; align-items: center; justify-content: space-between; padding: 0 15px; font-size: 12px; color: rgba(60,40,40,0.85); z-index: 9;">
+      <div style="display: flex; gap: 16px;"><span style="font-weight: 700;">🍎 Grandma</span><span>File</span><span>Edit</span><span>View</span><span>Window</span></div>
+      <span>Sat 11:38 AM · {{ stageLabel }}</span>
+    </div>
+    <!-- carpet floor + baseboard -->
+    <div style="position: absolute; left: 0; right: 0; bottom: 0; height: 158px; background: linear-gradient(180deg, #9FAAB8, #8C98A9);"></div>
+    <div style="position: absolute; left: 0; right: 0; bottom: 158px; height: 7px; background: #B7BFCA; box-shadow: 0 1px 0 rgba(40,50,65,0.18);"></div>
+    <div style="position: absolute; left: 0; right: 0; bottom: 158px; height: 158px; opacity: 0.14; background-image: repeating-linear-gradient(63deg, transparent 0 38px, rgba(40,50,65,0.5) 38px 39px), repeating-linear-gradient(-63deg, transparent 0 38px, rgba(40,50,65,0.5) 38px 39px);"></div>
+
+    <!-- office set dressing (behind agents) -->
+    <div style="position: absolute; top: 50px; right: 34px; width: 150px; height: 96px; border-radius: 6px; background: linear-gradient(180deg, #BFE0EE, #E9F1F0 70%, #DCE8E6); border: 5px solid #C9D0DA; box-shadow: inset 0 0 0 2px #E4E9F0, 0 6px 16px rgba(40,50,70,0.12); overflow: hidden;">
+      <div style="position: absolute; bottom: 0; left: 6px; width: 18px; height: 44px; background: #9DB6C4;"></div>
+      <div style="position: absolute; bottom: 0; left: 30px; width: 24px; height: 62px; background: #8FA9B8;"></div>
+      <div style="position: absolute; bottom: 0; left: 60px; width: 16px; height: 36px; background: #A6BCC8;"></div>
+      <div style="position: absolute; bottom: 0; left: 82px; width: 26px; height: 54px; background: #93AdBB;"></div>
+      <div style="position: absolute; bottom: 0; left: 114px; width: 18px; height: 40px; background: #A6BCC8;"></div>
+      <div style="position: absolute; top: 14px; right: 18px; width: 16px; height: 16px; border-radius: 50%; background: #F2E2A8; box-shadow: 0 0 14px rgba(242,226,168,0.7);"></div>
+      <div style="position: absolute; left: 50%; top: 0; bottom: 0; width: 3px; background: #C9D0DA;"></div>
+      <div style="position: absolute; top: 42px; left: 0; right: 0; height: 3px; background: #C9D0DA;"></div>
+    </div>
+    <div style="position: absolute; top: 52px; left: 36px; width: 46px; height: 46px; border-radius: 50%; background: #F4F1EA; border: 4px solid #B3372E; box-shadow: 0 5px 12px rgba(40,30,40,0.18);">
+      <div style="position: absolute; left: 50%; top: 12px; width: 2.5px; height: 11px; background: #34313A; transform-origin: 50% 100%; transform: translateX(-50%) rotate(38deg);"></div>
+      <div style="position: absolute; left: 50%; top: 9px; width: 2.5px; height: 14px; background: #34313A; transform-origin: 50% 100%; transform: translateX(-50%) rotate(-72deg);"></div>
+      <div style="position: absolute; left: 50%; top: 50%; width: 5px; height: 5px; border-radius: 50%; background: #B3372E; transform: translate(-50%,-50%);"></div>
+    </div>
+
+    {{ scene }}
+  </div>
+
+  <!-- CONTROLS -->
+  <div style="max-width: 1000px; margin: 16px auto 0; display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
+    <div onClick="{{ toggle }}" style="cursor: pointer; padding: 9px 18px; border-radius: 10px; font-size: 13px; font-weight: 700; background: #34313A; color: #FFFFFF; box-shadow: 0 3px 10px rgba(40,30,50,0.16);">{{ playLabel }}</div>
+    <div style="display: flex; gap: 7px;">
+      <sc-for list="{{ chips }}" as="c" hint-placeholder-count="4">
+        <div onClick="{{ c.go }}" style="cursor: pointer; display: flex; align-items: center; gap: 7px; padding: 7px 13px; border-radius: 9px; font-size: 12.5px; font-weight: 600; background: {{ c.bg }}; color: {{ c.fg }}; border: 1.5px solid {{ c.bd }}; transition: all .15s;">
+          <span style="width: 8px; height: 8px; border-radius: 50%; background: {{ c.dot }};"></span>{{ c.name }}
+        </div>
+      </sc-for>
+    </div>
+    <span style="margin-left: auto; font-size: 12px; color: #8A8590; font-family: 'Libre Caslon Text', serif; font-style: italic;">{{ hint }}</span>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;: {&quot;width&quot;: 1000, &quot;height&quot;: 720}}">
+class Component extends DCLogic {
+  state = { stage: 0, playing: true };
+
+  hub = { x: 250, y: 322 };
+
+  agents = [
+    { id: 'research', name: 'Researcher', who: 'Nonna Ada', tool: 'book', col: '#5A93C8', soft: '#86B4DC', cx: 468, cy: 168,
+      look: { skin: '#EBC9A4', hair: '#D7D1C7', glasses: true, scarf: null, earrings: true, bun: 'bun', chair: '#9C6F86', prop: 'plant' },
+      task: 'Reading auth/session.ts', status: 'working', prog: 82,
+      quip: 'Still READING? Pick a file and commit to it, dear.' },
+    { id: 'coder', name: 'Coder', who: 'Auntie Bea', tool: 'wrench', col: '#5FA57E', soft: '#8FC8A8', cx: 742, cy: 168,
+      look: { skin: '#E2BC92', hair: '#9A7A52', glasses: false, scarf: '#3E8E66', earrings: false, bun: 'none', chair: '#5E7E72', prop: 'papers' },
+      task: 'Editing middleware.ts', status: 'working', prog: 56,
+      quip: 'Snip, snip, snip. Measure twice before you cut, you.' },
+    { id: 'tester', name: 'Tester', who: 'Old Mae', tool: 'flask', col: '#D2A23E', soft: '#E6C878', cx: 468, cy: 384,
+      look: { skin: '#C99A6E', hair: '#ECE6DA', glasses: 'half', scarf: null, earrings: false, bun: 'curls', chair: '#B5793E', prop: 'tin' },
+      task: 'Running the test suite', status: 'working', prog: 34,
+      quip: 'Shake it all you like \u2014 green, or it\u2019s no supper.' },
+    { id: 'verifier', name: 'Verifier', who: 'Granny Pearl', tool: 'lens', col: '#9A78C8', soft: '#C0A6E2', cx: 742, cy: 384,
+      look: { skin: '#EAC7A0', hair: '#C7C0CA', glasses: true, scarf: null, earrings: true, bun: 'bob', brooch: true, chair: '#6E6A92', prop: 'photo' },
+      task: 'Waiting to review the diff', status: 'queued', prog: 0,
+      quip: 'Hired help, waiting on hired help. Marvellous.' }
+  ];
+
+  componentDidMount() { this.startTimer(); }
+  componentWillUnmount() { clearInterval(this.timer); }
+
+  startTimer() {
+    clearInterval(this.timer);
+    this.timer = setInterval(() => {
+      if (this.state.playing) this.setState((s) => ({ stage: (s.stage + 1) % this.agents.length }));
+    }, 3200);
+  }
+
+  pick(i) { this.setState({ stage: i }); this.startTimer(); }
+  toggle() { this.setState((s) => ({ playing: !s.playing })); this.startTimer(); }
+
+  statusOf(i) { const s = this.state.stage; return i < s ? 'done' : i === s ? 'working' : 'queued'; }
+
+  // a hand-off connector between two desks
+  link(x1, y1, x2, y2, col, on) {
+    const d = this.d.bind(this);
+    const dx = x2 - x1, dy = y2 - y1, len = Math.sqrt(dx * dx + dy * dy), ang = Math.atan2(dy, dx) * 180 / Math.PI;
+    const line = d({ left: x1 + 'px', top: y1 + 'px', width: len + 'px', height: '4px', transformOrigin: '0 50%', transform: 'rotate(' + ang + 'deg)',
+      backgroundImage: 'repeating-linear-gradient(90deg, ' + col + ' 0 9px, transparent 9px 17px)', backgroundSize: '17px 4px',
+      opacity: on ? 1 : 0.22, animation: on ? 'wk-dash 0.45s linear infinite' : 'none', borderRadius: '2px', zIndex: 3 });
+    const ah = d({ left: x2 + 'px', top: y2 + 'px', width: '1px', height: '1px', zIndex: 3, opacity: on ? 1 : 0.3 },
+      d({ left: '0', top: '0', width: '11px', height: '3px', background: col, borderRadius: '2px', transformOrigin: '0 50%', transform: 'rotate(' + (ang + 159) + 'deg)' }),
+      d({ left: '0', top: '0', width: '11px', height: '3px', background: col, borderRadius: '2px', transformOrigin: '0 50%', transform: 'rotate(' + (ang - 159) + 'deg)' }));
+    return [line, ah];
+  }
+
+  pipeline() {
+    const d = this.d.bind(this);
+    const st = this.state.stage, A = this.agents;
+    const segs = [[520, 150, 690, 150], [742, 206, 478, 346], [520, 366, 690, 366]];
+    const kids = [];
+    segs.forEach((p, k) => { kids.push(...this.link(p[0], p[1], p[2], p[3], A[k].col, st === k + 1)); });
+    return d({ left: '0', top: '0', width: '1000px', height: '522px' }, ...kids);
+  }
+
+  // the work folder, hovering over whoever currently holds it
+  baton(a) {
+    const d = this.d.bind(this);
+    return d({ left: (a.cx - 10) + 'px', top: (a.cy - 108) + 'px', width: '20px', height: '15px', zIndex: 10, animation: 'wk-bob 1.4s ease-in-out infinite' },
+      d({ left: 0, top: 4, width: 20, height: 11, borderRadius: '2px', background: '#E8C46A', boxShadow: '0 3px 6px rgba(40,30,20,0.28)' }),
+      d({ left: 0, top: 1, width: 10, height: 5, borderRadius: '2px 4px 0 0', background: '#E8C46A' }),
+      d({ left: 3, top: 7, width: 14, height: 1.6, borderRadius: 1, background: 'rgba(90,65,20,0.4)' }),
+      d({ left: 3, top: 10, width: 10, height: 1.6, borderRadius: 1, background: 'rgba(90,65,20,0.4)' }));
+  }
+
+  // a personal item on each grandma's desk
+  deskProp(type) {
+    const d = this.d.bind(this);
+    if (type === 'plant') return d({ left: '-7px', top: '85px', width: '13px', height: '17px', zIndex: 6 },
+      d({ left: 2, top: 9, width: 9, height: 8, borderRadius: '0 0 3px 3px', background: '#C97B4E' }),
+      d({ left: 3, top: 0, width: 4, height: 10, borderRadius: '3px', background: '#5FA57E', transform: 'rotate(-17deg)' }),
+      d({ left: 6, top: -1, width: 4, height: 11, borderRadius: '3px', background: '#6FB58E' }),
+      d({ left: 8, top: 1, width: 4, height: 9, borderRadius: '3px', background: '#5FA57E', transform: 'rotate(17deg)' }));
+    if (type === 'papers') return d({ left: '-8px', top: '92px', width: '16px', height: '11px', zIndex: 6 },
+      d({ left: 0, top: 4, width: 14, height: 6, borderRadius: '1px', background: '#EBE5D8', transform: 'rotate(-6deg)', boxShadow: '0 1px 2px rgba(0,0,0,0.14)' }),
+      d({ left: 1, top: 2, width: 14, height: 6, borderRadius: '1px', background: '#F6F2E8', transform: 'rotate(4deg)' }),
+      d({ left: 4, top: 4, width: 8, height: 1.4, background: 'rgba(40,30,40,0.22)' }));
+    if (type === 'tin') return d({ left: '-7px', top: '90px', width: '14px', height: '13px', zIndex: 6 },
+      d({ left: 0, top: 4, width: 14, height: 9, borderRadius: '2px', background: '#C0506A' }),
+      d({ left: 0, top: 2, width: 14, height: 5, borderRadius: '7px / 4px', background: '#D86A82' }),
+      d({ left: 4, top: 7, width: 6, height: 3, borderRadius: '1px', background: 'rgba(255,255,255,0.45)' }));
+    return d({ left: '-7px', top: '88px', width: '14px', height: '15px', zIndex: 6 },
+      d({ left: 0, top: 1, width: 14, height: 13, borderRadius: '1px', background: '#F2EFE8', boxShadow: '0 1px 2px rgba(0,0,0,0.18)' }),
+      d({ left: 1.5, top: 2.5, width: 11, height: 10, background: '#9FB8C4' }),
+      d({ left: 4.5, top: 6, width: 5, height: 5, borderRadius: '50%', background: '#E8C49E' }));
+  }
+
+  d(style, ...kids) {
+    return React.createElement('div', { style: Object.assign({ position: 'absolute' }, style) }, ...kids);
+  }
+
+  // ---------- yarn thread hub -> agent ----------
+  thread(a, active) {
+    const d = this.d.bind(this);
+    const dx = a.cx - this.hub.x, dy = (a.cy + 26) - this.hub.y;
+    const len = Math.sqrt(dx * dx + dy * dy);
+    const ang = Math.atan2(dy, dx) * 180 / Math.PI;
+    return d({ left: this.hub.x + 'px', top: this.hub.y + 'px', width: len + 'px', height: '4px',
+      transformOrigin: '0 50%', transform: 'rotate(' + ang + 'deg)',
+      backgroundImage: 'repeating-linear-gradient(90deg, ' + a.col + ' 0 8px, transparent 8px 16px)',
+      backgroundSize: '16px 4px', opacity: active ? 0.5 : 0.2,
+      animation: active ? 'wk-dash 0.5s linear infinite' : 'none', borderRadius: '2px', zIndex: 2 });
+  }
+
+  // ---------- the work shown on each clerk's monitor ----------
+  monitor(a) {
+    const d = this.d.bind(this);
+    const col = a.col, soft = a.soft;
+    let sc = [];
+    if (a.tool === 'book') {
+      sc = [
+        d({ left: 4, top: 4, width: 17, height: 2, borderRadius: 1, background: soft }),
+        d({ left: 4, top: 8, width: 13, height: 1.6, borderRadius: 1, background: 'rgba(255,255,255,0.38)' }),
+        d({ left: 4, top: 11, width: 16, height: 1.6, borderRadius: 1, background: 'rgba(255,255,255,0.38)' }),
+        d({ left: 4, top: 14, width: 9, height: 1.6, borderRadius: 1, background: 'rgba(255,255,255,0.38)' })
+      ];
+    } else if (a.tool === 'wrench') {
+      sc = [
+        d({ left: 4, top: 4, width: 6, height: 1.8, borderRadius: 1, background: '#C58AE0' }),
+        d({ left: 12, top: 4, width: 9, height: 1.8, borderRadius: 1, background: soft }),
+        d({ left: 7, top: 7.6, width: 12, height: 1.8, borderRadius: 1, background: soft }),
+        d({ left: 7, top: 11.2, width: 8, height: 1.8, borderRadius: 1, background: 'rgba(255,255,255,0.4)' }),
+        d({ left: 4, top: 14.8, width: 6, height: 1.8, borderRadius: 1, background: soft }),
+        d({ left: 12, top: 14.4, width: 1.8, height: 3.2, background: '#FFFFFF', animation: 'wk-pulse 0.9s steps(1) infinite' })
+      ];
+    } else if (a.tool === 'flask') {
+      const row = (y, c, w) => [
+        d({ left: 4, top: y, width: 3, height: 3, borderRadius: '50%', background: c }),
+        d({ left: 9, top: y + 0.6, width: w, height: 1.8, borderRadius: 1, background: 'rgba(255,255,255,0.32)' })
+      ];
+      sc = [].concat(row(4, '#5FA552', 13), row(8.5, '#5FA552', 16), row(13, '#E0604F', 10));
+    } else {
+      sc = [
+        d({ left: 4, top: 4, width: 3, height: 2, background: '#5FA552' }),
+        d({ left: 9, top: 4.2, width: 13, height: 1.6, borderRadius: 1, background: 'rgba(154,210,150,0.7)' }),
+        d({ left: 4, top: 8, width: 3, height: 2, background: '#E0604F' }),
+        d({ left: 9, top: 8.2, width: 10, height: 1.6, borderRadius: 1, background: 'rgba(224,96,79,0.6)' }),
+        d({ left: 9, top: 12, width: 14, height: 1.6, borderRadius: 1, background: 'rgba(255,255,255,0.3)' }),
+        d({ left: 0, top: 2, width: 11, height: 11, borderRadius: '50%', border: '2px solid rgba(255,255,255,0.5)', animation: 'wk-scan 1.6s ease-in-out infinite' })
+      ];
+    }
+    return d({ left: '49px', top: '73px', width: '34px', height: '32px', zIndex: 6 },
+      d({ left: 0, top: 0, width: 30, height: 23, borderRadius: 3, background: '#2B313C', boxShadow: 'inset 0 0 0 1px rgba(255,255,255,0.06)' },
+        d({ left: 3, top: 3, width: 24, height: 16, borderRadius: 1.5, background: '#161A22', overflow: 'hidden' },
+          ...sc,
+          a.status === 'working' ? d({ position: 'absolute', left: 0, top: 0, bottom: 0, width: '45%', background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.13), transparent)', animation: 'wk-shim 1.5s ease-in-out infinite' }) : null,
+          a.status === 'done' ? d({ position: 'absolute', left: 0, top: 0, right: 0, bottom: 0, background: 'rgba(18,26,22,0.85)', display: 'flex', alignItems: 'center', justifyContent: 'center' }, d({ position: 'relative', width: 9, height: 5, borderLeft: '2.6px solid #6FCB7E', borderBottom: '2.6px solid #6FCB7E', transform: 'rotate(-45deg)', marginTop: -2 })) : null)),
+      d({ left: 13, top: 23, width: 4, height: 4, background: '#3A4150' }),
+      d({ left: 8, top: 26, width: 14, height: 3, borderRadius: 2, background: '#3A4150' }));
+  }
+
+  // ---------- a village grandma's head, with her own look ----------
+  clerkHead(a) {
+    const d = this.d.bind(this);
+    const L = a.look, line = '#6B4A35', skin = L.skin, hair = L.hair;
+    const eye = (x) => d({ left: x + 'px', top: '24px', width: '5px', height: '5px', animation: 'wk-blink 4.5s ease-in-out infinite' },
+      d({ left: '0', top: '0', width: '5px', height: '5px', borderRadius: '50%', background: '#3A2A1E' }));
+    const k = [];
+    // hair back
+    k.push(d({ left: '3px', top: '6px', width: '46px', height: '48px', borderRadius: '50%', background: hair }));
+    // crown variants
+    if (L.scarf) {
+      k.push(d({ left: '0', top: '0', width: '52px', height: '26px', borderRadius: '26px 26px 9px 9px', background: L.scarf }));
+    } else if (L.bun === 'bun') {
+      k.push(d({ left: '19px', top: '-3px', width: '15px', height: '15px', borderRadius: '50%', background: hair }));
+    } else if (L.bun === 'curls') {
+      [5, 17, 29, 39].forEach((x, i) => k.push(d({ left: x + 'px', top: (i % 2 ? 1 : -2) + 'px', width: '13px', height: '13px', borderRadius: '50%', background: hair })));
+    } else if (L.bun === 'bob') {
+      k.push(d({ left: '1px', top: '14px', width: '11px', height: '30px', borderRadius: '6px', background: hair }));
+      k.push(d({ left: '40px', top: '14px', width: '11px', height: '30px', borderRadius: '6px', background: hair }));
+    }
+    // face
+    k.push(d({ left: '8px', top: '12px', width: '36px', height: '40px', borderRadius: '50%', background: skin }));
+    // brows
+    k.push(d({ left: '12px', top: '20px', width: '10px', height: '2.2px', background: line, transform: 'rotate(13deg)', transformOrigin: '0 50%' }));
+    k.push(d({ left: '30px', top: '20px', width: '10px', height: '2.2px', background: line, transform: 'rotate(-13deg)', transformOrigin: '100% 50%' }));
+    // glasses
+    if (L.glasses === true) {
+      k.push(d({ left: '9px', top: '23px', width: '13px', height: '13px', borderRadius: '50%', border: '2px solid ' + line, background: 'rgba(255,255,255,0.3)' }));
+      k.push(d({ left: '30px', top: '23px', width: '13px', height: '13px', borderRadius: '50%', border: '2px solid ' + line, background: 'rgba(255,255,255,0.3)' }));
+      k.push(d({ left: '22px', top: '28px', width: '8px', height: '2px', background: line }));
+    } else if (L.glasses === 'half') {
+      k.push(d({ left: '10px', top: '30px', width: '12px', height: '7px', borderBottom: '2px solid ' + line, borderRadius: '0 0 12px 12px' }));
+      k.push(d({ left: '30px', top: '30px', width: '12px', height: '7px', borderBottom: '2px solid ' + line, borderRadius: '0 0 12px 12px' }));
+      k.push(d({ left: '22px', top: '31px', width: '8px', height: '2px', background: line }));
+    }
+    // eyes
+    k.push(eye(16)); k.push(eye(33));
+    // nose
+    k.push(d({ left: '24px', top: '31px', width: '5px', height: '7px', borderRadius: '50%', background: '#D89A6E' }));
+    // cheeks
+    k.push(d({ left: '9px', top: '36px', width: '8px', height: '5px', borderRadius: '50%', background: 'rgba(206,74,56,0.26)' }));
+    k.push(d({ left: '35px', top: '36px', width: '8px', height: '5px', borderRadius: '50%', background: 'rgba(206,74,56,0.26)' }));
+    // grumpy mouth
+    k.push(d({ left: '20px', top: '43px', width: '12px', height: '7px', borderTop: '2.2px solid ' + line, borderRadius: '50%' }));
+    // scarf side drapes + dots (drawn over face edges)
+    if (L.scarf) {
+      k.push(d({ left: '0', top: '14px', width: '13px', height: '32px', background: L.scarf, clipPath: 'polygon(0 0, 100% 22%, 72% 100%, 0 100%)' }));
+      k.push(d({ left: '39px', top: '14px', width: '13px', height: '32px', background: L.scarf, clipPath: 'polygon(0 22%, 100% 0, 100% 100%, 28% 100%)' }));
+      k.push(d({ left: '12px', top: '6px', width: '4px', height: '4px', borderRadius: '50%', background: 'rgba(255,255,255,0.5)' }));
+      k.push(d({ left: '34px', top: '5px', width: '4px', height: '4px', borderRadius: '50%', background: 'rgba(255,255,255,0.5)' }));
+      k.push(d({ left: '24px', top: '2px', width: '4px', height: '4px', borderRadius: '50%', background: 'rgba(255,255,255,0.5)' }));
+    }
+    // earrings
+    if (L.earrings) {
+      k.push(d({ left: '5px', top: '37px', width: '4px', height: '6px', borderRadius: '0 0 3px 3px', background: '#E8B84A' }));
+      k.push(d({ left: '43px', top: '37px', width: '4px', height: '6px', borderRadius: '0 0 3px 3px', background: '#E8B84A' }));
+    }
+    return d({ left: '16px', top: '4px', width: '52px', height: '58px' }, ...k);
+  }
+
+  bot(a, idx, spotted) {
+    const d = this.d.bind(this);
+    const dim = spotted ? 1 : 0.84;
+    const L = a.look;
+    const statusCol = a.status === 'working' ? a.col : a.status === 'queued' ? '#A8A2AE' : '#5FA552';
+    return d({ left: (a.cx - 42) + 'px', top: (a.cy - 70) + 'px', width: '84px', height: '150px', cursor: 'pointer', opacity: dim, transition: 'opacity .2s', zIndex: spotted ? 8 : 4, onClick: a._click },
+      // floor shadow
+      d({ left: '6px', top: '138px', width: '72px', height: '11px', borderRadius: '50%', background: 'rgba(40,50,65,0.22)', filter: 'blur(4px)' }),
+      // office chair back
+      d({ left: '24px', top: '54px', width: '36px', height: '50px', borderRadius: '14px 14px 5px 5px', background: '#3A4150' }),
+      d({ left: '28px', top: '60px', width: '28px', height: '38px', borderRadius: '9px', background: L.chair }),
+      // cardigan behind desk\n      d({ left: '20px', top: '56px', width: '44px', height: '48px', borderRadius: '16px 16px 10px 10px', background: a.col }),
+      // shawl over shoulders
+      d({ left: '20px', top: '56px', width: '44px', height: '22px', borderRadius: '16px 16px 18px 18px', background: a.soft, opacity: 0.92 }),
+      // collar
+      d({ left: '31px', top: '52px', width: '22px', height: '13px', borderRadius: '0 0 12px 12px', background: '#F1ECE1' }),
+      // buttons
+      d({ left: '41px', top: '72px', width: '4px', height: '4px', borderRadius: '50%', background: 'rgba(255,255,255,0.55)' }),
+      d({ left: '41px', top: '82px', width: '4px', height: '4px', borderRadius: '50%', background: 'rgba(255,255,255,0.55)' }),
+      // brooch
+      L.brooch ? d({ left: '33px', top: '64px', width: '7px', height: '7px', borderRadius: '50%', background: '#E8B84A', boxShadow: '0 0 0 2px rgba(255,255,255,0.4)' }) : null,
+      // spotlight ring
+      spotted ? d({ left: '8px', top: '-4px', width: '68px', height: '82px', borderRadius: '18px', border: '2.5px solid rgba(255,240,210,0.92)', animation: 'wk-glow 1.6s ease-in-out infinite' }) : null,
+      // bobbing head
+      d({ left: '0', top: '0', width: '84px', height: '100px', animation: 'wk-bob 1.6s ease-in-out infinite ' + (idx * 0.3) + 's' },
+        this.clerkHead(a)),
+      // arms (sleeves + hands) on desk
+      d({ left: '16px', top: '90px', width: '20px', height: '11px', borderRadius: '6px', background: a.col, transform: 'rotate(12deg)', zIndex: 6 }),
+      d({ left: '22px', top: '96px', width: '10px', height: '10px', borderRadius: '50%', background: L.skin, zIndex: 6 }),
+      d({ left: '50px', top: '90px', width: '20px', height: '11px', borderRadius: '6px', background: a.col, transform: 'rotate(-12deg)', zIndex: 6 }),
+      d({ left: '54px', top: '96px', width: '10px', height: '10px', borderRadius: '50%', background: L.skin, zIndex: 6 }),
+      // desk top
+      d({ left: '-8px', top: '100px', width: '100px', height: '12px', borderRadius: '3px', background: '#CBD1DB', boxShadow: '0 3px 0 #A7B0BD', zIndex: 5 }),
+      // modesty panel
+      d({ left: '0', top: '112px', width: '84px', height: '30px', background: '#B6BEC9', zIndex: 5 }),
+      d({ left: '0', top: '112px', width: '84px', height: '30px', background: 'repeating-linear-gradient(90deg, transparent 0 26px, rgba(40,50,65,0.08) 26px 27px)', zIndex: 5 }),
+      // monitor
+      this.monitor(a),
+      // keyboard
+      d({ left: '12px', top: '103px', width: '34px', height: '6px', borderRadius: '2px', background: '#9AA2AE', zIndex: 6 }),
+      // coffee mug
+      d({ left: '5px', top: '90px', width: '11px', height: '12px', borderRadius: '0 0 4px 4px', background: '#EEE8DC', zIndex: 6 },
+        d({ left: '10px', top: '2px', width: '5px', height: '6px', borderRadius: '0 5px 5px 0', border: '2px solid #EEE8DC', borderLeft: 'none' }),
+        d({ left: '2px', top: '-4px', width: '3px', height: '5px', borderRadius: '2px', background: 'rgba(255,255,255,0.6)', animation: 'wk-spark 1.7s ease-in-out infinite' })),
+      // personal desk prop
+      this.deskProp(L.prop),
+      // status pip
+      d({ left: '62px', top: '2px', width: '12px', height: '12px', borderRadius: '50%', background: statusCol, border: '2px solid rgba(255,255,255,0.8)', zIndex: 9, animation: a.status === 'working' ? 'wk-pulse 1.2s ease-in-out infinite' : 'none' }));
+  }
+
+  statusCard(a, spotted) {
+    const d = this.d.bind(this);
+    const w = 168;
+    const top = a.cy < 300 ? a.cy - 132 : a.cy + 52;
+    const stTxt = a.status === 'working' ? 'working' : a.status === 'queued' ? 'queued' : 'done';
+    const stCol = a.status === 'working' ? a.col : a.status === 'queued' ? '#A8A2AE' : '#5FA552';
+    return d({ left: (a.cx - w / 2) + 'px', top: top + 'px', width: w + 'px',
+        background: 'rgba(252,250,247,0.96)', borderRadius: '12px', padding: '9px 11px',
+        border: '1.5px solid ' + (spotted ? a.col : 'rgba(40,30,40,0.08)'),
+        boxShadow: spotted ? '0 10px 24px rgba(30,25,45,0.22)' : '0 6px 14px rgba(30,25,45,0.12)',
+        transition: 'all .2s', zIndex: 7, pointerEvents: 'none' },
+      d({ position: 'relative', display: 'flex', alignItems: 'center', gap: '7px', marginBottom: '5px' },
+        d({ position: 'relative', width: '8px', height: '8px', borderRadius: '50%', background: a.col }),
+        d({ position: 'relative', fontSize: '12.5px', fontWeight: '700', color: '#34313A' }, a.name),
+        d({ position: 'relative', fontSize: '10px', fontStyle: 'italic', color: '#A0989E' }, a.who),
+        d({ position: 'relative', marginLeft: 'auto', fontSize: '9.5px', fontWeight: '600', letterSpacing: '0.5px', textTransform: 'uppercase', color: stCol }, stTxt)),
+      d({ position: 'relative', fontFamily: "'IBM Plex Mono', monospace", fontSize: '10.5px', color: '#6E6A76', lineHeight: '1.35', marginBottom: '7px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }, a.task),
+      d({ position: 'relative', height: '6px', borderRadius: '4px', background: 'rgba(40,30,40,0.1)', overflow: 'hidden' },
+        d({ position: 'relative', height: '100%', width: a.prog + '%', borderRadius: '4px', background: a.col }),
+        a.status === 'working' ? d({ position: 'absolute', left: '0', top: '0', bottom: '0', width: '40%', background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.55), transparent)', animation: 'wk-shim 1.4s ease-in-out infinite' }) : null));
+  }
+
+  // ---------- Grandma forewoman ----------
+  face(brow) {
+    const d = this.d.bind(this);
+    const skin = '#EBC9A4', line = '#6B4A35';
+    const eye = (x) => d({ left: x + 'px', top: '24px', width: '6px', height: '6px', animation: 'wk-blink 4.4s ease-in-out infinite' },
+      d({ left: '1px', top: '1px', width: '4px', height: '4px', borderRadius: '50%', background: '#3A2A1E' }));
+    return d({ position: 'relative', width: '64px', height: '60px' },
+      d({ left: '7px', top: '14px', width: '50px', height: '48px', borderRadius: '50%', background: skin }),
+      d({ left: '13px', top: '18px', width: '12px', height: '2.5px', background: line, transform: 'rotate(' + brow + 'deg)', transformOrigin: '0 50%' }),
+      d({ left: '39px', top: '18px', width: '12px', height: '2.5px', background: line, transform: 'rotate(-' + brow + 'deg)', transformOrigin: '100% 50%' }),
+      d({ left: '11px', top: '22px', width: '14px', height: '14px', borderRadius: '50%', border: '2px solid ' + line, background: 'rgba(255,255,255,0.35)' }),
+      d({ left: '39px', top: '22px', width: '14px', height: '14px', borderRadius: '50%', border: '2px solid ' + line, background: 'rgba(255,255,255,0.35)' }),
+      d({ left: '25px', top: '28px', width: '14px', height: '2px', background: line }),
+      eye(16), eye(44),
+      d({ left: '30px', top: '32px', width: '6px', height: '8px', borderRadius: '50%', background: '#D89A6E' }),
+      d({ left: '11px', top: '38px', width: '9px', height: '6px', borderRadius: '50%', background: 'rgba(206,74,56,0.26)' }),
+      d({ left: '44px', top: '38px', width: '9px', height: '6px', borderRadius: '50%', background: 'rgba(206,74,56,0.26)' }),
+      d({ left: '26px', top: '46px', width: '14px', height: '8px', borderTop: '2.5px solid ' + line, borderRadius: '50%' }));
+  }
+
+  grandma() {
+    const d = this.d.bind(this);
+    const skin = '#EBC9A4', hair = '#D8D2C8', dress = '#7A5C84', apron = '#ECE4D6';
+    return d({ left: '118px', top: '196px', width: '180px', height: '210px', zIndex: 5 },
+      d({ left: '28px', top: '198px', width: '120px', height: '12px', borderRadius: '50%', background: 'rgba(60,40,30,0.22)', filter: 'blur(5px)' }),
+      d({ left: '0', top: '0', width: '180px', height: '210px', animation: 'wk-breathe 3.6s ease-in-out infinite' },
+        // legs
+        d({ left: '72px', top: '176px', width: '11px', height: '20px', background: '#E0D6C4' }),
+        d({ left: '90px', top: '176px', width: '11px', height: '20px', background: '#E0D6C4' }),
+        d({ left: '66px', top: '192px', width: '23px', height: '11px', borderRadius: '7px 9px 9px 7px', background: '#4A4250' }),
+        d({ left: '88px', top: '192px', width: '23px', height: '11px', borderRadius: '7px 9px 9px 7px', background: '#4A4250' }),
+        // body
+        d({ left: '56px', top: '90px', width: '64px', height: '100px', borderRadius: '28px 28px 12px 12px', background: dress }),
+        d({ left: '70px', top: '114px', width: '36px', height: '76px', borderRadius: '8px', background: apron }),
+        d({ left: '79px', top: '74px', width: '18px', height: '24px', borderRadius: '6px', background: skin }),
+        d({ left: '70px', top: '86px', width: '36px', height: '17px', borderRadius: '0 0 16px 16px', background: '#EFEAE0' }),
+        // arms holding the basket of threads
+        d({ left: '50px', top: '120px', width: '15px', height: '40px', borderRadius: '8px', background: dress, transform: 'rotate(20deg)' }),
+        d({ left: '112px', top: '120px', width: '15px', height: '40px', borderRadius: '8px', background: dress, transform: 'rotate(-20deg)' }),
+        // head
+        d({ left: '60px', top: '20px', width: '64px', height: '60px' },
+          d({ left: '2px', top: '6px', width: '60px', height: '56px', borderRadius: '50%', background: hair }),
+          d({ left: '22px', top: '-4px', width: '24px', height: '22px', borderRadius: '50%', background: hair }),
+          d({ left: '28px', top: '-8px', width: '12px', height: '12px', borderRadius: '50%', background: '#C7C0B6' }),
+          this.face(16))),
+      // the manager's clipboard (the hub) — color-coded assignment rows
+      d({ left: '92px', top: '112px', width: '48px', height: '60px', borderRadius: '5px', background: '#C28A4A', transform: 'rotate(-7deg)', boxShadow: '0 5px 12px rgba(60,40,30,0.28)', zIndex: 6 },
+        d({ left: '13px', top: '-5px', width: '22px', height: '9px', borderRadius: '3px', background: '#9A6E3C' }),
+        d({ left: '6px', top: '8px', width: '36px', height: '46px', borderRadius: '2px', background: '#F5EFE2' },
+          d({ left: '5px', top: '6px', width: '8px', height: '5px', borderRadius: '1px', background: '#5A93C8' }),
+          d({ left: '16px', top: '7px', width: '15px', height: '2.4px', borderRadius: '1px', background: 'rgba(40,30,40,0.3)' }),
+          d({ left: '5px', top: '16px', width: '8px', height: '5px', borderRadius: '1px', background: '#5FA57E' }),
+          d({ left: '16px', top: '17px', width: '15px', height: '2.4px', borderRadius: '1px', background: 'rgba(40,30,40,0.3)' }),
+          d({ left: '5px', top: '26px', width: '8px', height: '5px', borderRadius: '1px', background: '#D2A23E' }),
+          d({ left: '16px', top: '27px', width: '15px', height: '2.4px', borderRadius: '1px', background: 'rgba(40,30,40,0.3)' }),
+          d({ left: '5px', top: '36px', width: '8px', height: '5px', borderRadius: '1px', background: '#9A78C8' }),
+          d({ left: '16px', top: '37px', width: '15px', height: '2.4px', borderRadius: '1px', background: 'rgba(40,30,40,0.3)' }))));
+  }
+
+  scene() {
+    const d = this.d.bind(this);
+    const st = this.state.stage;
+    const kids = [];
+    this.agents.forEach((a, i) => {
+      a._click = () => this.pick(i);
+      a.status = this.statusOf(i);
+      a.prog = a.status === 'done' ? 100 : a.status === 'working' ? 62 : 0;
+    });
+    this.agents.forEach((a, i) => kids.push(this.thread(a, i === st)));
+    kids.push(this.pipeline());
+    kids.push(this.grandma());
+    this.agents.forEach((a, i) => kids.push(this.bot(a, i, i === st)));
+    kids.push(this.baton(this.agents[st]));
+    this.agents.forEach((a, i) => kids.push(this.statusCard(a, i === st)));
+    return d({ left: '0', top: '26px', right: '0', bottom: '0', width: '1000px', height: '522px' }, ...kids);
+  }
+
+  renderVals() {
+    const st = this.state.stage;
+    const a = this.agents[st];
+    const chips = this.agents.map((ag, i) => {
+      const on = i === st;
+      const done = i < st;
+      return { name: ag.name, dot: done ? '#5FA552' : ag.col, go: () => this.pick(i),
+        bg: on ? ag.col : '#FFFFFF', fg: on ? '#FFFFFF' : '#4A4654',
+        bd: on ? ag.col : '#E4E1E8' };
+    });
+    return {
+      scene: this.scene(),
+      stageLabel: 'Step ' + (st + 1) + '/4 \u00b7 ' + a.who + ' is on it',
+      chips,
+      playLabel: this.state.playing ? 'Pause' : 'Play',
+      hint: '\u201C' + a.quip + '\u201D',
+      toggle: () => this.toggle()
+    };
+  }
+}
+</script>
+</body>
+</html>

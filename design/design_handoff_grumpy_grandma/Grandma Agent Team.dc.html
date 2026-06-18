@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous">
+  <link href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Text:ital@0;1&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+  <style>
+    html, body { margin: 0; padding: 0; background: #CFD2DA; }
+    @keyframes tm-blink { 0%, 92%, 100% { transform: scaleY(1); } 96% { transform: scaleY(0.12); } }
+    @keyframes tm-dash { to { background-position-x: 16px; } }
+    @keyframes tm-ring { 0%, 100% { box-shadow: 0 0 0 0 rgba(0,0,0,0); } 50% { box-shadow: 0 0 0 4px var(--rc); } }
+    @keyframes tm-pop { 0% { transform: scale(0.4); opacity: 0; } 60% { transform: scale(1.12); opacity: 1; } 100% { transform: scale(1); opacity: 1; } }
+    @keyframes tm-float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-4px); } }
+    @keyframes tm-up { 0% { transform: translate(0,0); opacity: 0; } 20% { opacity: 1; } 100% { opacity: 0; } }
+    @keyframes tm-flow { to { stroke-dashoffset: -28; } }
+  </style>
+</helmet>
+
+<div style="min-height: 100vh; background: #CFD2DA; font-family: Helvetica, Arial, sans-serif; color: #2B2930; padding: 30px 30px 64px;">
+
+  <div style="max-width: 1000px; margin: 0 auto 22px;">
+    <div style="font-size: 11px; letter-spacing: 2.5px; text-transform: uppercase; color: #7C7986; margin-bottom: 9px;">Grumpy Grandma · The whole operation</div>
+    <h1 style="margin: 0 0 6px; font-size: 27px; font-weight: 700; letter-spacing: -0.5px;">One task, a whole team of grandmas</h1>
+    <p style="margin: 0; font-size: 13.5px; color: #5E5B66; max-width: 620px; line-height: 1.5;">A realistic agent run: the orchestrator delegates to leads, each lead spawns her own sub-agents, the work fans out in parallel, then results report back up the tree. Play it through.</p>
+  </div>
+
+  <div style="max-width: 1000px; margin: 0 auto; border-radius: 16px; overflow: hidden; background: #F5F6F9; box-shadow: 0 18px 44px rgba(40,30,50,0.2);">
+    <!-- top strip -->
+    <div style="display: flex; align-items: center; justify-content: space-between; padding: 14px 22px; border-bottom: 1px solid #E7E8EE; background: #FFFFFF;">
+      <div>
+        <div style="display: flex; align-items: baseline; gap: 9px;">
+          <span style="font-size: 11px; font-weight: 700; color: #A7A2B0;">PHASE {{ phaseNum }}/6</span>
+          <span style="font-size: 16px; font-weight: 700; color: #34313A;">{{ phaseLabel }}</span>
+        </div>
+        <div style="font-size: 12.5px; color: #6E6A76; margin-top: 2px;">{{ phaseCap }}</div>
+      </div>
+      <div style="display: flex; gap: 26px;">
+        <div style="text-align: right;"><div style="font-size: 19px; font-weight: 700; color: #2E6FB0;">{{ active }}</div><div style="font-size: 9.5px; letter-spacing: 0.6px; text-transform: uppercase; color: #9A96A2;">agents live</div></div>
+        <div style="text-align: right;"><div style="font-size: 19px; font-weight: 700; color: #5E8E6E;">{{ depth }}</div><div style="font-size: 9.5px; letter-spacing: 0.6px; text-transform: uppercase; color: #9A96A2;">depth</div></div>
+        <div style="text-align: right;"><div style="font-size: 19px; font-weight: 700; color: #C8902E;">{{ tokens }}</div><div style="font-size: 9.5px; letter-spacing: 0.6px; text-transform: uppercase; color: #9A96A2;">tokens</div></div>
+      </div>
+    </div>
+    <!-- graph -->
+    <div style="position: relative; height: 472px; background-image: radial-gradient(rgba(60,50,80,0.07) 1.1px, transparent 1.1px); background-size: 22px 22px;">
+      {{ graph }}
+    </div>
+  </div>
+
+  <!-- controls -->
+  <div style="max-width: 1000px; margin: 16px auto 0; display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
+    <div style="display: flex; background: #ECEAF0; border-radius: 10px; padding: 3px; gap: 2px;">
+      <div onClick="{{ setTree }}" style="cursor: pointer; padding: 7px 14px; border-radius: 8px; font-size: 12.5px; font-weight: 600; background: {{ treeBg }}; color: {{ treeFg }}; box-shadow: {{ treeSh }};">Tree</div>
+      <div onClick="{{ setTimeline }}" style="cursor: pointer; padding: 7px 14px; border-radius: 8px; font-size: 12.5px; font-weight: 600; background: {{ tlBg }}; color: {{ tlFg }}; box-shadow: {{ tlSh }};">Timeline</div>
+    </div>
+    <div style="display: flex; gap: 8px;">
+      <div onClick="{{ prev }}" style="cursor: pointer; padding: 9px 16px; border-radius: 10px; font-size: 13px; font-weight: 600; background: #FFFFFF; color: #4A4654; box-shadow: 0 3px 10px rgba(40,30,50,0.1);">&lsaquo; Back</div>
+      <div onClick="{{ toggle }}" style="cursor: pointer; padding: 9px 18px; border-radius: 10px; font-size: 13px; font-weight: 700; background: #34313A; color: #FFFFFF; box-shadow: 0 3px 10px rgba(40,30,50,0.16);">{{ playLabel }}</div>
+      <div onClick="{{ next }}" style="cursor: pointer; padding: 9px 16px; border-radius: 10px; font-size: 13px; font-weight: 600; background: #FFFFFF; color: #4A4654; box-shadow: 0 3px 10px rgba(40,30,50,0.1);">Next &rsaquo;</div>
+    </div>
+    <div style="display: flex; gap: 7px;">
+      <sc-for list="{{ dots }}" as="dot" hint-placeholder-count="6">
+        <div onClick="{{ dot.go }}" style="cursor: pointer; width: 11px; height: 11px; border-radius: 50%; background: {{ dot.bg }}; border: 1.5px solid {{ dot.bd }};"></div>
+      </sc-for>
+    </div>
+    <div style="margin-left: auto; display: flex; align-items: center; gap: 14px; font-size: 11.5px; color: #7C7986;">
+      <span style="display: flex; align-items: center; gap: 5px;"><span style="width: 9px; height: 9px; border-radius: 50%; border: 2px solid #C2C6CE;"></span>pending</span>
+      <span style="display: flex; align-items: center; gap: 5px;"><span style="width: 9px; height: 9px; border-radius: 50%; border: 2px solid #5A93C8;"></span>working</span>
+      <span style="display: flex; align-items: center; gap: 5px;"><span style="width: 9px; height: 9px; border-radius: 50%; background: #5FA552;"></span>done</span>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;: {&quot;width&quot;: 1000, &quot;height&quot;: 660}}">
+class Component extends DCLogic {
+  state = { phase: 0, playing: true, view: 'tree' };
+
+  nodes = [
+    { id: 'orch', name: 'Grandma', role: 'orchestrator', col: '#7A5C84', hair: '#D8D2C8', glasses: true, x: 470, y: 96, spawn: 0, done: 5, parent: null, rp: -1, tok: 0.62 },
+    { id: 'res', name: 'Ada', role: 'research lead', col: '#5A93C8', hair: '#D7D1C7', glasses: true, x: 175, y: 246, spawn: 1, done: 4, parent: 'orch', rp: 4, tok: 0.34 },
+    { id: 'bld', name: 'Bea', role: 'build lead', col: '#5FA57E', hair: '#9A7A52', glasses: false, x: 470, y: 246, spawn: 1, done: 4, parent: 'orch', rp: 4, tok: 0.41 },
+    { id: 'rev', name: 'Pearl', role: 'review lead', col: '#9A78C8', hair: '#C7C0CA', glasses: true, x: 775, y: 246, spawn: 1, done: 4, parent: 'orch', rp: 4, tok: 0.28 },
+    { id: 'web', name: 'Fern', role: 'web search', col: '#5A93C8', hair: '#E2DCD2', glasses: false, x: 95, y: 392, spawn: 2, done: 3, parent: 'res', rp: 3, tok: 0.12 },
+    { id: 'cod', name: 'Edna', role: 'code search', col: '#5A93C8', hair: '#C9B89A', glasses: true, x: 255, y: 392, spawn: 2, done: 3, parent: 'res', rp: 3, tok: 0.16 },
+    { id: 'tw', name: 'Mae', role: 'test writer', col: '#5FA57E', hair: '#ECE6DA', glasses: false, x: 400, y: 392, spawn: 2, done: 3, parent: 'bld', rp: 3, tok: 0.19 },
+    { id: 'dw', name: 'Vi', role: 'doc writer', col: '#5FA57E', hair: '#B8A78E', glasses: true, x: 545, y: 392, spawn: 2, done: 3, parent: 'bld', rp: 3, tok: 0.11 },
+    { id: 'lint', name: 'Glad', role: 'linter', col: '#9A78C8', hair: '#CFC8D2', glasses: false, x: 775, y: 392, spawn: 2, done: 3, parent: 'rev', rp: 3, tok: 0.08 }
+  ];
+
+  phases = [
+    { label: 'Task arrives', cap: 'One job lands on the orchestrator\u2019s desk.', quip: 'A job comes in. Here we go again.' },
+    { label: 'Delegate', cap: 'She splits it and assigns three leads.', quip: 'I can\u2019t do it all. You, you and you \u2014 go.' },
+    { label: 'Spawn sub-agents', cap: 'Each lead forks her own helpers. Work fans out in parallel.', quip: 'Now THEY\u2019VE hired help. Grandmas all the way down.' },
+    { label: 'Sub-agents report', cap: 'Helpers finish and hand their results back up.', quip: 'The little ones report back. Tidy work, mostly.' },
+    { label: 'Leads synthesize', cap: 'Each lead merges her helpers\u2019 work and returns it.', quip: 'My leads pull it together. About time.' },
+    { label: 'Deliver', cap: 'The orchestrator assembles the final answer.', quip: 'Done. Nine of us for one task. Mind the bill.' }
+  ];
+
+  tokens = ['0.12M', '0.46M', '1.18M', '1.74M', '2.21M', '2.48M'];
+  depthBy = [0, 1, 2, 2, 1, 0];
+
+  componentDidMount() { this.startTimer(); }
+  componentWillUnmount() { clearInterval(this.timer); }
+
+  startTimer() {
+    clearInterval(this.timer);
+    this.timer = setInterval(() => {
+      if (this.state.playing) this.setState((s) => ({ phase: (s.phase + 1) % 6 }));
+    }, 2600);
+  }
+
+  go(n) { this.setState({ phase: (n + 6) % 6 }); this.startTimer(); }
+  toggle() { this.setState((s) => ({ playing: !s.playing })); this.startTimer(); }
+
+  d(style, ...kids) {
+    return React.createElement('div', { style: Object.assign({ position: 'absolute' }, style) }, ...kids);
+  }
+
+  statusOf(n, p) {
+    if (p < n.spawn) return 'pending';
+    if (p >= n.done) return 'done';
+    if (n.id === 'orch' && p >= 1 && p <= 3) return 'waiting';
+    return 'working';
+  }
+
+  byId(id) { return this.nodes.find((n) => n.id === id); }
+
+  fmtM(v) { return v.toFixed(2) + 'M'; }
+  accrued(n, p) {
+    if (p < n.spawn) return 0;
+    const span = n.done - n.spawn;
+    return n.tok * Math.min(1, (p + 1 - n.spawn) / span);
+  }
+  totalTok(p) { return this.nodes.reduce((s, n) => s + this.accrued(n, p), 0); }
+
+  edge(n, p) {
+    const d = this.d.bind(this);
+    const par = this.byId(n.parent);
+    const drawn = p >= n.spawn;
+    const dx = n.x - par.x, dy = n.y - par.y, full = Math.sqrt(dx * dx + dy * dy);
+    const ux = dx / full, uy = dy / full, inset = 27;
+    const x1 = par.x + ux * inset, y1 = par.y + uy * inset;
+    const len = full - inset * 2;
+    const ang = Math.atan2(dy, dx) * 180 / Math.PI;
+    const returning = p === n.rp;
+    const childDone = p >= n.done;
+    const working = p >= n.spawn && p < n.done && !childDone;
+    const col = returning ? '#5FA552' : childDone ? '#8FC7A0' : working ? n.col : '#AEB3BE';
+    const op = returning ? 1 : childDone ? 0.7 : working ? 0.95 : drawn ? 0.7 : 0.4;
+    const anim = returning ? 'tm-dash 0.5s linear infinite reverse' : working ? 'tm-dash 0.7s linear infinite' : 'none';
+    return d({ left: x1 + 'px', top: y1 + 'px', width: (drawn ? len : 0) + 'px', height: '4px', transformOrigin: '0 50%',
+        transform: 'rotate(' + ang + 'deg)', opacity: op, transition: 'width .5s ease, opacity .3s', zIndex: 1 },
+      // solid base line (renders in every engine)
+      d({ position: 'absolute', left: 0, top: '1px', width: '100%', height: '2px', background: col, borderRadius: '2px' }),
+      // animated dashed flow overlay
+      d({ position: 'absolute', left: 0, top: 0, width: '100%', height: '4px', borderRadius: '2px',
+        backgroundImage: 'repeating-linear-gradient(90deg, ' + col + ' 0 6px, transparent 6px 12px)',
+        backgroundSize: '12px 4px', animation: anim }));
+  }
+
+  edgesSvg(p) {
+    const lines = this.nodes.filter((n) => n.parent).map((n) => {
+      const par = this.byId(n.parent);
+      const dx = n.x - par.x, dy = n.y - par.y, full = Math.sqrt(dx * dx + dy * dy);
+      const ux = dx / full, uy = dy / full, inset = 27;
+      const x1 = par.x + ux * inset, y1 = par.y + uy * inset, x2 = n.x - ux * inset, y2 = n.y - uy * inset;
+      const drawn = p >= n.spawn, returning = p === n.rp, childDone = p >= n.done;
+      const working = p >= n.spawn && p < n.done && !childDone;
+      const col = returning ? '#5FA552' : childDone ? '#8FC7A0' : working ? n.col : '#AEB3BE';
+      const op = !drawn ? 0.16 : returning ? 1 : childDone ? 0.7 : working ? 0.95 : 0.7;
+      const style = { transition: 'opacity .3s' };
+      if (returning) style.animation = 'tm-flow 0.5s linear infinite reverse';
+      else if (working) style.animation = 'tm-flow 0.7s linear infinite';
+      return React.createElement('line', { key: n.id, x1: x1, y1: y1, x2: x2, y2: y2, stroke: col, strokeWidth: 3, strokeLinecap: 'round', strokeDasharray: '7 7', opacity: op, style: style });
+    });
+    return React.createElement('svg', { width: 1000, height: 472, style: { position: 'absolute', left: 0, top: 0, zIndex: 1, pointerEvents: 'none' } }, ...lines);
+  }
+
+  avatar(n, status) {
+    const d = this.d.bind(this);
+    const skin = '#EBC9A4', line = '#6B4A35';
+    const ring = status === 'done' ? '#5FA552' : status === 'working' ? n.col : status === 'waiting' ? '#D9A23E' : '#C2C6CE';
+    const working = status === 'working';
+    const eye = (x) => d({ left: x + 'px', top: '16px', width: '4px', height: '4px', animation: 'tm-blink 4.5s ease-in-out infinite' },
+      d({ left: '0', top: '0', width: '4px', height: '4px', borderRadius: '50%', background: '#3A2A1E' }));
+    const k = [];
+    // hair
+    k.push(d({ left: '5px', top: '3px', width: '34px', height: '34px', borderRadius: '50%', background: n.hair }));
+    k.push(d({ left: '15px', top: '0', width: '14px', height: '12px', borderRadius: '50%', background: n.hair }));
+    // face
+    k.push(d({ left: '8px', top: '8px', width: '28px', height: '30px', borderRadius: '50%', background: skin }));
+    // brows
+    k.push(d({ left: '10px', top: '14px', width: '8px', height: '1.8px', background: line, transform: 'rotate(12deg)', transformOrigin: '0 50%' }));
+    k.push(d({ left: '26px', top: '14px', width: '8px', height: '1.8px', background: line, transform: 'rotate(-12deg)', transformOrigin: '100% 50%' }));
+    // glasses
+    if (n.glasses) {
+      k.push(d({ left: '8px', top: '15px', width: '10px', height: '10px', borderRadius: '50%', border: '1.6px solid ' + line, background: 'rgba(255,255,255,0.3)' }));
+      k.push(d({ left: '26px', top: '15px', width: '10px', height: '10px', borderRadius: '50%', border: '1.6px solid ' + line, background: 'rgba(255,255,255,0.3)' }));
+      k.push(d({ left: '18px', top: '19px', width: '8px', height: '1.6px', background: line }));
+    }
+    k.push(eye(13)); k.push(eye(27));
+    // nose + mouth
+    k.push(d({ left: '20px', top: '22px', width: '4px', height: '5px', borderRadius: '50%', background: '#D89A6E' }));
+    k.push(d({ left: '15px', top: '30px', width: '10px', height: '5px', borderTop: '2px solid ' + line, borderRadius: '50%' }));
+    return d({ left: (n.x - 22) + 'px', top: (n.y - 22) + 'px', width: '44px', height: '44px',
+        opacity: status === 'pending' ? 0.4 : 1, transition: 'opacity .35s', zIndex: 4, cursor: 'pointer', onClick: n._click },
+      // ring
+      d({ left: '0', top: '0', width: '44px', height: '44px', borderRadius: '50%', background: '#FFFFFF', border: '2.5px solid ' + ring,
+        boxShadow: '0 4px 10px rgba(40,30,50,0.12)', '--rc': ring, animation: working ? 'tm-ring 1.4s ease-in-out infinite' : 'none' }),
+      d({ left: '0', top: '0', width: '44px', height: '44px' }, ...k),
+      // done check badge
+      status === 'done' ? d({ left: '30px', top: '29px', width: '15px', height: '15px', borderRadius: '50%', background: '#5FA552', border: '2px solid #FFFFFF', display: 'flex', alignItems: 'center', justifyContent: 'center' },
+        d({ position: 'relative', width: '6px', height: '3px', borderLeft: '2px solid #FFFFFF', borderBottom: '2px solid #FFFFFF', transform: 'rotate(-45deg)', marginTop: '-1px' })) : null);
+  }
+
+  label(n, status, p) {
+    const d = this.d.bind(this);
+    const faded = status === 'pending';
+    return d({ left: (n.x - 60) + 'px', top: (n.y + 24) + 'px', width: '120px', textAlign: 'center', opacity: faded ? 0.4 : 1, transition: 'opacity .35s', zIndex: 3, pointerEvents: 'none' },
+      d({ position: 'relative', fontSize: '12.5px', fontWeight: '700', color: '#34313A' }, n.name),
+      d({ position: 'relative', fontSize: '10px', color: '#8A8590', marginTop: '1px' }, n.role),
+      status !== 'pending' ? d({ position: 'relative', fontSize: '10.5px', fontWeight: '700', fontFamily: "'IBM Plex Mono', monospace", color: n.col, marginTop: '2px' }, this.fmtM(this.accrued(n, p))) : null);
+  }
+
+  bubble(p) {
+    const d = this.d.bind(this);
+    const q = this.phases[p].quip;
+    return d({ left: '20px', top: '16px', width: '232px', zIndex: 6 },
+      d({ position: 'relative', background: '#34313A', color: '#F4F1EA', borderRadius: '13px 13px 13px 3px', padding: '10px 13px',
+        fontFamily: "'Libre Caslon Text', serif", fontStyle: 'italic', fontSize: '12.5px', lineHeight: '1.4', boxShadow: '0 8px 20px rgba(30,25,45,0.22)' }, q),
+      d({ left: '14px', top: '52px', width: '0', height: '0', borderLeft: '8px solid transparent', borderRight: '8px solid transparent', borderTop: '9px solid #34313A' }));
+  }
+
+  graph() { return this.state.view === 'timeline' ? this.timeline() : this.treeGraph(); }
+
+  treeGraph() {
+    const d = this.d.bind(this);
+    const p = this.state.phase;
+    this.nodes.forEach((n, i) => { n._click = () => {}; });
+    const kids = [];
+    // edges (single SVG layer)
+    kids.push(this.edgesSvg(p));
+    // labels then avatars
+    this.nodes.forEach((n) => kids.push(this.label(n, this.statusOf(n, p), p)));
+    this.nodes.forEach((n) => kids.push(this.avatar(n, this.statusOf(n, p))));
+    kids.push(this.bubble(p));
+    return d({ left: '0', top: '0', right: '0', bottom: '0', width: '1000px', height: '472px' }, ...kids);
+  }
+
+  timeline() {
+    const d = this.d.bind(this);
+    const p = this.state.phase;
+    const labelW = 168, padR = 12, top = 46, rowH = 46;
+    const W = 852, chartL = labelW, chartW = W - labelW - padR, colW = chartW / 6;
+    const X = (i) => chartL + i * colW;
+    const order = ['orch', 'res', 'web', 'cod', 'bld', 'tw', 'dw', 'rev', 'lint'];
+    const lvl = { orch: 0, res: 1, web: 2, cod: 2, bld: 1, tw: 2, dw: 2, rev: 1, lint: 2 };
+    const rowY = {}; order.forEach((id, i) => rowY[id] = top + i * rowH + rowH / 2);
+    const colNames = ['Task', 'Delegate', 'Spawn', 'Report', 'Merge', 'Deliver'];
+    const kids = [];
+    // column shading + headers
+    for (let i = 0; i < 6; i++) {
+      if (i % 2 === 0) kids.push(d({ left: X(i) + 'px', top: top + 'px', width: colW + 'px', height: (rowH * 9) + 'px', background: 'rgba(60,50,80,0.035)' }));
+      kids.push(d({ left: X(i) + 'px', top: '16px', width: colW + 'px', textAlign: 'center', fontSize: '10px', fontWeight: '700', letterSpacing: '0.5px', textTransform: 'uppercase', color: i === p ? '#34313A' : '#A7A2B0', transition: 'color .2s' }, colNames[i]));
+    }
+    kids.push(d({ left: chartL + 'px', top: (top - 5) + 'px', width: chartW + 'px', height: '1px', background: '#E7E8EE' }));
+    // delegation connectors (SVG)
+    const segs = this.nodes.filter((n) => n.parent && p >= n.spawn).map((n) => {
+      const x = X(n.spawn), py = rowY[n.parent], cy = rowY[n.id];
+      return React.createElement('path', { key: n.id, d: 'M ' + x + ' ' + py + ' L ' + x + ' ' + (cy - 9), stroke: '#BFC3CC', strokeWidth: 2, fill: 'none', strokeDasharray: '3 3' });
+    });
+    kids.push(React.createElement('svg', { width: 1000, height: 472, style: { position: 'absolute', left: 0, top: 0, zIndex: 2, pointerEvents: 'none' } }, ...segs));
+    // rows
+    order.forEach((id) => {
+      const n = this.byId(id), y = rowY[id], lv = lvl[id], st = this.statusOf(n, p);
+      kids.push(d({ left: (14 + lv * 16) + 'px', top: (y - 10) + 'px', width: (labelW - 74 - lv * 16) + 'px', fontSize: '12px', fontWeight: lv === 0 ? '700' : '600', color: st === 'pending' ? '#B4B0BA' : '#34313A', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }, n.name));
+      kids.push(d({ left: (14 + lv * 16) + 'px', top: (y + 4) + 'px', width: (labelW - 30 - lv * 16) + 'px', fontSize: '9.5px', color: '#9A96A2', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }, n.role));
+      if (p >= n.spawn) kids.push(d({ left: (labelW - 62) + 'px', top: (y - 8) + 'px', width: '54px', textAlign: 'right', fontSize: '11px', fontWeight: '700', fontFamily: "'IBM Plex Mono', monospace", color: n.col }, this.fmtM(this.accrued(n, p))));
+      const bx = X(n.spawn), bw = (n.done - n.spawn) * colW;
+      kids.push(d({ left: bx + 'px', top: (y - 8) + 'px', width: bw + 'px', height: '16px', borderRadius: '8px', background: n.col, opacity: 0.16 }));
+      const fillEnd = Math.min(n.done, p + 1);
+      if (fillEnd > n.spawn) {
+        const fw = (fillEnd - n.spawn) * colW, isDone = p >= n.done;
+        kids.push(d({ left: bx + 'px', top: (y - 8) + 'px', width: fw + 'px', height: '16px', borderRadius: '8px', background: n.col, opacity: isDone ? 0.92 : 1, transition: 'width .4s ease',
+            backgroundImage: !isDone ? 'repeating-linear-gradient(45deg, rgba(255,255,255,0.28) 0 5px, transparent 5px 10px)' : 'none' },
+          isDone ? d({ right: '3px', top: '2px', width: '12px', height: '12px', borderRadius: '50%', background: 'rgba(255,255,255,0.92)', display: 'flex', alignItems: 'center', justifyContent: 'center' },
+            d({ position: 'relative', width: '5px', height: '3px', borderLeft: '2px solid ' + n.col, borderBottom: '2px solid ' + n.col, transform: 'rotate(-45deg)', marginTop: '-1px' })) : null));
+      }
+    });
+    // playhead
+    const hx = X(Math.min(p + 1, 6));
+    kids.push(d({ left: hx + 'px', top: (top - 6) + 'px', width: '2px', height: (rowH * 9 + 4) + 'px', background: '#34313A', opacity: 0.45, zIndex: 3, transition: 'left .4s ease' }));
+    kids.push(d({ left: (hx - 5) + 'px', top: (top - 12) + 'px', width: '12px', height: '8px', background: '#34313A', clipPath: 'polygon(0 0, 100% 0, 50% 100%)', zIndex: 3, transition: 'left .4s ease' }));
+    // quip
+    kids.push(d({ left: '16px', top: (top + rowH * 9 + 4) + 'px', width: '700px', fontFamily: "'Libre Caslon Text', serif", fontStyle: 'italic', fontSize: '12.5px', color: '#6E6A76' }, '\u201C' + this.phases[p].quip + '\u201D'));
+    return d({ left: '16px', top: '0', width: W + 'px', height: '472px' }, ...kids);
+  }
+
+  renderVals() {
+    const p = this.state.phase;
+    const ph = this.phases[p];
+    const active = this.nodes.filter((n) => p >= n.spawn && p < n.done).length;
+    const dots = this.phases.map((_, i) => ({
+      bg: i === p ? '#34313A' : i < p ? '#A7A2B0' : '#E4E1E8',
+      bd: i === p ? '#34313A' : '#D2CED8',
+      go: () => this.go(i)
+    }));
+    return {
+      graph: this.graph(),
+      phaseNum: String(p + 1),
+      phaseLabel: ph.label,
+      phaseCap: ph.cap,
+      active: String(active),
+      depth: String(this.depthBy[p]),
+      tokens: this.fmtM(this.totalTok(p)),
+      dots,
+      playLabel: this.state.playing ? 'Pause' : 'Play',
+      setTree: () => this.setState({ view: 'tree' }),
+      setTimeline: () => this.setState({ view: 'timeline' }),
+      treeBg: this.state.view === 'tree' ? '#FFFFFF' : 'transparent',
+      treeFg: this.state.view === 'tree' ? '#34313A' : '#8A8590',
+      treeSh: this.state.view === 'tree' ? '0 2px 6px rgba(40,30,50,0.12)' : 'none',
+      tlBg: this.state.view === 'timeline' ? '#FFFFFF' : 'transparent',
+      tlFg: this.state.view === 'timeline' ? '#34313A' : '#8A8590',
+      tlSh: this.state.view === 'timeline' ? '0 2px 6px rgba(40,30,50,0.12)' : 'none',
+      prev: () => this.go(p - 1),
+      next: () => this.go(p + 1),
+      toggle: () => this.toggle()
+    };
+  }
+}
+</script>
+</body>
+</html>
