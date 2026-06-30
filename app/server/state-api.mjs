@@ -91,8 +91,14 @@ export function enrich(cur) {
     estimated: true,
   };
 
-  // recent metadata events for the Session Feed (newest first; NO tool-level content, §7)
-  cur.recent_events = readEvents(40);
+  // recent metadata events for the Session Feed (newest first; NO tool-level content, §7).
+  // Attach FRESH per-agent tokens (same agentFreshTokens as the Agent Team) so the feed
+  // shows the SAME number, not the cache-inclusive total stored on the event.
+  cur.recent_events = readEvents(40).map((e) => {
+    if (e.event !== 'subagent_stop' || !e.agent_id) return e;
+    const f = agentFreshTokens(e.agent_id, e.session_id);
+    return f.in == null ? e : { ...e, fresh_in: f.in, fresh_out: f.out };
+  });
   return cur;
 }
 
