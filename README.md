@@ -20,7 +20,7 @@ Six connected views, all driven by **live** data (no mock data anywhere):
 | View | What it shows |
 | --- | --- |
 | **Live Reaction** | A frosted, always-on-top widget. Grandma's expression maps to your 5-hour rate window; fresh tokens / spend / open sessions; discrete events (new session, idle, faint, reset, spend spike) with a toast + chime. |
-| **The Agent Team** | Live orchestration graph per project — orchestrator → sub-agents — with exact per-agent token costs. |
+| **The Agent Team** | Live orchestration graph per project — orchestrator → sub-agents — with per-agent fresh-token costs (input + output, cache excluded). |
 | **The Workshop** | The same agents drawn as grandma clerks at their desks. |
 | **The Ledger** | 7-day fresh-token history, top-offender ranking, estimated cost. |
 | **Decision Briefs** | A queue of pending approval briefs, nagged by age. |
@@ -69,8 +69,11 @@ The interesting part of this project isn't the cartoon — it's the data.
     stale readings. Fixed: the **freshest reading in the current window**, stale windows excluded.
   - *Spent today* summed each session's **cumulative lifetime** cost. Fixed: a **per-day delta
     ledger**, clearly labeled an estimate (it's Claude's client-side estimate, not your bill).
-- **Per-agent tokens are exact.** Each sub-agent's tokens are summed from its dedicated
-  transcript and verified bit-for-bit against the runtime's reported total (`29826 == 29826`).
+- **Per-agent tokens are consistent and traceable.** Every screen shows the same per-agent
+  figure — **fresh** tokens (input + output, cache excluded), summed from the sub-agent's
+  dedicated transcript — matching the app's "fresh tokens" headline. The cache-inclusive
+  *billed* total is also computed from that transcript and was verified bit-for-bit against
+  the runtime's reported total (`29826 == 29826`); fresh is the displayed default.
 - **A real desktop-distribution story**: bundling a *self-contained* Node runtime (the official
   binary, after discovering Homebrew's node drags in a 22-dylib closure), transparent + vibrancy
   windows, a menu-bar tray, clean sidecar lifecycle, and code-signing.

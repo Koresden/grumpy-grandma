@@ -64,7 +64,11 @@ function detail(e) {
   const bits = [];
   if (e.agent_type) bits.push(e.agent_type);
   if (e.project) bits.push(e.project);
-  if (e.tokens_in != null) bits.push(`${fmt((e.tokens_in || 0) + (e.tokens_out || 0))} tok`);
+  // Fresh tokens (matches the Agent Team); fall back to the event's cache-inclusive
+  // total only when the sub-agent transcript was missing on the server.
+  const tin = e.fresh_in != null ? e.fresh_in : e.tokens_in;
+  const tout = e.fresh_in != null ? e.fresh_out : e.tokens_out;
+  if (tin != null) bits.push(`${fmt((tin || 0) + (tout || 0))} tok`);
   if (e.meta && e.meta.brief_title) bits.push(e.meta.brief_title);
   return bits.join('  ·  ');
 }
