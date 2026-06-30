@@ -16,6 +16,10 @@ function localDayStartMs() {
   const n = new Date();
   return new Date(n.getFullYear(), n.getMonth(), n.getDate()).getTime();
 }
+// Local 'YYYY-MM-DD' (NOT UTC) so every "today" boundary matches localDayStartMs.
+export function localDayKey(d = new Date()) {
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+}
 function readJSON(p, fb) { try { return JSON.parse(fs.readFileSync(p, 'utf8')); } catch { return fb; } }
 
 // --- fresh tokens today (cached ~10s; parses only transcripts touched today) ---------
@@ -140,7 +144,7 @@ function loadLedger() {
   return _ledger;
 }
 export function costToday(sessions) {
-  const today = new Date().toISOString().slice(0, 10);
+  const today = localDayKey(); // local day, matching todayTokens/dailyTokens (was UTC → reset at wrong hour)
   const L = loadLedger();
   if (L.date !== today) { L.date = today; L.last = {}; L.total = 0; }
   for (const [sid, s] of Object.entries(sessions || {})) {

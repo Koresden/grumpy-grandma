@@ -27,7 +27,7 @@ export function Hub({ state, go }) {
           <p className="sub">{quip || 'She watches your token usage and grumbles about it.'}</p>
           <p className="sub mono" style={{ marginTop: 8, fontSize: 12, color: 'var(--ink-3)' }}>
             {connected
-              ? `live · $${(today?.cost_usd ?? 0).toFixed(2)} today · ${Object.keys(current?.sessions || {}).length} sessions`
+              ? `live · $${(today?.cost_usd ?? 0).toFixed(2)} today · ${current?.open_sessions ?? Object.keys(current?.sessions || {}).length} open`
               : 'connecting to the data layer…'}
           </p>
         </div>
