@@ -18,6 +18,20 @@ function localDayStartMs() {
 }
 function readJSON(p, fb) { try { return JSON.parse(fs.readFileSync(p, 'utf8')); } catch { return fb; } }
 
+// One assistant turn is written as SEVERAL JSONL rows (one per content block: thinking /
+// text / tool_use), and every row repeats the SAME message.id + identical message.usage;
+// resumed/compacted sessions also copy rows across transcripts. So summing usage per row
+// multiplies a turn's tokens by its block count (and again per copy). Counting each
+// message.id once collapses both. Returns true the first time an id is seen, false after.
+// Rows lacking a message.id are always counted (can't dedupe, and shouldn't occur here).
+function countOnce(seen, o) {
+  const id = o.message && o.message.id;
+  if (!id) return true;
+  if (seen.has(id)) return false;
+  seen.add(id);
+  return true;
+}
+
 // --- fresh tokens today (cached ~10s; parses only transcripts touched today) ---------
 let _tok = { at: 0, val: { input: 0, output: 0 } };
 
@@ -45,6 +59,7 @@ export function todayTokens() {
   if (now - _tok.at < 10000) return _tok.val;
   const start = localDayStartMs();
   let input = 0, output = 0;
+  const seen = new Set();                                    // dedupe by message.id (see countOnce)
   for (const f of transcriptFiles()) {
     let st; try { st = fs.statSync(f); } catch { continue; }
     if (st.mtimeMs < start) continue;                       // not touched today → skip parse
@@ -55,7 +70,7 @@ export function todayTokens() {
       if (o.type !== 'assistant') continue;
       if (o.timestamp && Date.parse(o.timestamp) < start) continue;
       const u = o.message && o.message.usage;
-      if (!u) continue;
+      if (!u || !countOnce(seen, o)) continue;
       input += u.input_tokens || 0;                          // FRESH only — no cache_* fields
       output += u.output_tokens || 0;
     }
@@ -88,13 +103,14 @@ export function agentFreshTokens(agentId, sessionId) {
   const c = _agentTok[agentId];
   if (c && c.mtime === st.mtimeMs) return { in: c.in, out: c.out };
   let input = 0, output = 0;
+  const seen = new Set();                                    // dedupe by message.id (see countOnce)
   try {
     for (const line of fs.readFileSync(p, 'utf8').split('\n')) {
       if (!line) continue;
       let o; try { o = JSON.parse(line); } catch { continue; }
       if (o.type !== 'assistant') continue;
       const u = o.message && o.message.usage;
-      if (!u) continue;
+      if (!u || !countOnce(seen, o)) continue;
       input += u.input_tokens || 0;
       output += u.output_tokens || 0;
     }
@@ -110,6 +126,7 @@ export function dailyTokens(nDays = 7) {
   if (now - _week.at < 30000 && _week.days === nDays) return _week.val;
   const start = localDayStartMs() - (nDays - 1) * 86400000;
   const buckets = {}; // 'YYYY-MM-DD' -> {input, output}
+  const seen = new Set();                                    // dedupe by message.id (see countOnce)
   for (const f of transcriptFiles()) {
     let st; try { st = fs.statSync(f); } catch { continue; }
     if (st.mtimeMs < start) continue;
@@ -121,7 +138,7 @@ export function dailyTokens(nDays = 7) {
       const t = o.timestamp ? Date.parse(o.timestamp) : 0;
       if (!t || t < start) continue;
       const u = o.message && o.message.usage;
-      if (!u) continue;
+      if (!u || !countOnce(seen, o)) continue;
       const d = new Date(t);
       const key = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
       const b = (buckets[key] ||= { input: 0, output: 0 });
