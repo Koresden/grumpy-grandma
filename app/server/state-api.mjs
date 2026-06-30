@@ -4,7 +4,7 @@
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
-import { todayTokens, costToday, agentFreshTokens, dailyTokens } from './usage.mjs';
+import { todayTokens, costToday, agentFreshTokens, dailyTokens, localDayKey } from './usage.mjs';
 
 const STATE_DIR = path.join(os.homedir(), '.claude', 'grandma', 'state');
 const CURRENT = path.join(STATE_DIR, 'current.json');
@@ -81,7 +81,9 @@ export function enrich(cur) {
 
   if (Array.isArray(cur.agents)) {
     cur.agents = cur.agents.map((a) => {
-      const project = a.project || byAgent[a.agent_id] || bySession[a.session_id] || sessions[a.session_id]?.project || null;
+      // Resolve a project for every agent; orphans (events lost) bucket under "unknown"
+      // so they still show and count, rather than being silently dropped by the screens.
+      const project = a.project || byAgent[a.agent_id] || bySession[a.session_id] || sessions[a.session_id]?.project || 'unknown';
       const fresh = project ? agentFreshTokens(a.agent_id, a.session_id) : { in: null, out: null };
       return {
         ...a,
@@ -100,7 +102,7 @@ export function enrich(cur) {
   const ft = todayTokens();
   const sessMap = Object.fromEntries(slices.map((s) => [s.session_id, s]));
   cur.today = {
-    date: new Date().toISOString().slice(0, 10),
+    date: localDayKey(),
     tokens_in: ft.input, tokens_out: ft.output,
     cost_usd: costToday(sessMap),
     estimated: true,

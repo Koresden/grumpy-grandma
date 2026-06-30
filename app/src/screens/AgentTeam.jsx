@@ -6,8 +6,8 @@ const STATUS_RING = { active: 'var(--a-plum)', done: 'var(--st-done)', waiting: 
 export function AgentTeam({ state, go }) {
   const { current, connected } = state;
   const sessions = current?.sessions || {};
-  // Only agents we can attribute to a project (the server enriches a.project from events).
-  // Unattributable orphans — e.g. agent files whose events were lost — are dropped, not bucketed.
+  // Agents grouped by project (the server enriches a.project from events, bucketing
+  // unattributable orphans — e.g. agent files whose events were lost — under "unknown").
   const agents = (current?.agents || []).filter((a) => a.project);
 
   // group by project — only projects that actually have sub-agents (solo sessions omitted).
