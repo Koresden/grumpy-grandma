@@ -75,21 +75,37 @@ IFS="$US" read -r IDX QUIP < <(jq -rn --arg t "$TRIGGER" --slurpfile L "$LINES" 
   | [ ($i | tostring), (if $n == 0 then "" else ($a[$i] // "") end) ] | join("")' 2>/dev/null)
 [ -n "$IDX" ] || IDX=0
 
+# --- per-day cost baseline (fixes the cumulative-sum "spent today" bug) ------
+# cost_usd is the session's CUMULATIVE lifetime cost. Today's spend for this
+# session = cost now - the first cumulative cost seen today. Persist that
+# baseline (day_date/day_base) in the slice; re-baseline when the local day
+# rolls over. Mirrors the Phase 2 delta-ledger semantics (first-render-of-day).
+PREV_DAYD=""; PREV_DAYB=0
+if [ -f "$SFILE" ]; then
+  read -r PREV_DAYD PREV_DAYB < <(jq -r '"\(.day_date // "none") \(.day_base // 0)"' "$SFILE" 2>/dev/null)
+fi
+if [ "$PREV_DAYD" = "$TODAY" ]; then DAY_BASE="$PREV_DAYB"; else DAY_BASE="$COST"; fi
+[ -n "$DAY_BASE" ] || DAY_BASE=0
+
 # --- write this session's slice (live cost/ctx/rate-limits) -----------------
 mkdir -p "$SDIR/sessions" 2>/dev/null
 printf '%s' "$input" | jq \
   --arg sid "$SID" --arg mid "$MID" --arg disp "$DISP" --arg proj "$PROJECT" \
   --arg cwd "$CWD" --arg now "$NOW" --arg sev "$SEV" --arg trig "$TRIGGER" \
+  --arg today "$TODAY" --arg daybase "$DAY_BASE" \
   --argjson idx "$IDX" --argjson pct "${PCT:-0}" '
   { session_id: $sid, model: $mid, display_name: $disp, project: $proj, cwd: $cwd,
     cost_usd: (.cost.total_cost_usd // 0), ctx_pct: $pct,
     ctx_size: (.context_window.context_window_size // null),
     rate_limits: (.rate_limits // null), severity: $sev,
+    day_date: $today, day_base: ($daybase | tonumber),
     last_quip: { trigger: $trig, idx: $idx }, last_ts: $now }' \
   > "$SFILE.tmp.$$" 2>/dev/null && mv -f "$SFILE.tmp.$$" "$SFILE" 2>/dev/null
 
-# --- today's cost across all sessions (live for this one) -------------------
-TODAYCOST=$(jq -s --arg d "$TODAY" '[.[] | select((.last_ts|tostring)[0:10]==$d) | .cost_usd] | add // 0' "$SDIR"/sessions/*.json 2>/dev/null)
+# --- today's cost across all sessions: sum of per-session deltas since each ---
+# session's daily baseline (NOT cumulative lifetime cost, which double-counts
+# prior days). Only sessions baselined for today contribute; clamp negatives.
+TODAYCOST=$(jq -s --arg d "$TODAY" '[.[] | select(.day_date==$d) | (.cost_usd - (.day_base // 0)) | (if . < 0 then 0 else . end)] | add // 0' "$SDIR"/sessions/*.json 2>/dev/null)
 [ -n "$TODAYCOST" ] || TODAYCOST=$COST
 
 # --- build bar + render (pure bash, no spawns) ------------------------------
