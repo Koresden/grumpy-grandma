@@ -40,17 +40,32 @@ function readSlices() {
 }
 
 // Account-global 5h limit. It's a ROLLING window (usage ages out → % can tick down), so
-// `max` over-reports. The accurate "now" value is the FRESHEST reading from a CURRENT-window
-// session (resets_at still in the future). Stale past-window readings — idle sessions that
-// re-render with a days-old reading — are excluded entirely. Freshest-within-current avoids
-// the original jitter because the stale sessions causing it are filtered out first.
-function freshestRateLimits(slices) {
+// `max` over-reports. The accurate "now" value is the freshest READING from a CURRENT-window
+// session (resets_at still in the future); stale past-window readings are excluded.
+// last_ts is statusline RENDER time — bumped ~every 10s even while a session is idle — so
+// ranking by it surfaces whoever re-rendered last, not whoever read the limit last, letting
+// an idle session's stale % mask an actively-burning one's true (higher) reading. We instead
+// rank by when each session's reading last CHANGED (a proxy for when it was actually read),
+// tie-breaking on last_ts. On a tie (e.g. just after sidecar start), this matches the old
+// render-time behavior, then improves as soon as any session's reading moves.
+const _rateSeen = {}; // session_id -> { pct, at } — wall-clock when its 5h reading last changed
+function rateReadAt(s, now) {
+  const pct = s.rate_limits?.five_hour?.used_percentage ?? null;
+  const prev = _rateSeen[s.session_id];
+  if (!prev || prev.pct !== pct) { _rateSeen[s.session_id] = { pct, at: now }; return now; }
+  return prev.at;
+}
+
+function freshestRateLimits(slices, now) {
   const withRL = slices.filter((s) => s.rate_limits && s.rate_limits.five_hour);
   if (!withRL.length) return null;
-  const nowSec = Date.now() / 1000; // resets_at is epoch seconds
+  const nowSec = now / 1000; // resets_at is epoch seconds
   const current = withRL.filter((s) => (s.rate_limits.five_hour.resets_at || 0) > nowSec);
   const pool = current.length ? current : withRL; // prefer current window; fall back if none
-  pool.sort((a, b) => String(b.last_ts || '').localeCompare(String(a.last_ts || '')));
+  const readAt = new Map(pool.map((s) => [s, rateReadAt(s, now)])); // compute change-times once
+  pool.sort((a, b) =>
+    readAt.get(b) - readAt.get(a) ||                                 // freshest reading first
+    String(b.last_ts || '').localeCompare(String(a.last_ts || ''))); // tie-break: render time
   return pool[0].rate_limits;
 }
 
@@ -77,7 +92,7 @@ export function enrich(cur) {
     });
   }
 
-  const fresh = freshestRateLimits(slices);
+  const fresh = freshestRateLimits(slices, now);
   if (fresh) cur.rate_limits = fresh;
 
   cur.open_sessions = slices.filter((s) => s.last_ts && now - Date.parse(s.last_ts) < OPEN_SESSION_MS).length;
