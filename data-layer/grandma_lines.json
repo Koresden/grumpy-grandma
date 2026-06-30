@@ -1,0 +1,113 @@
+{
+  "_comment": "Personality strings keyed by trigger. Tone: dry, disapproving, secretly proud. Never mean about the user, only about token waste, idle agents, and sloppy handoffs. Statusline picks the highest-priority applicable trigger; rotates within it; never repeats the last-shown line.",
+  "session_start": [
+    "Oh good, you're back. I'll put the kettle on and the meter running.",
+    "Another session. Try not to spend it all in one place.",
+    "Sit up straight. We're burning tokens already."
+  ],
+  "budget_ok": [
+    "Barely touched it. Look at you, being sensible for once.",
+    "Plenty of room left. Don't get cocky.",
+    "Tidy. I almost have nothing to complain about. Almost."
+  ],
+  "suspicious": [
+    "Halfway through the window and what do we have to show for it?",
+    "That context is filling up faster than my pill organizer.",
+    "I'm watching that bar climb. So are you, I hope."
+  ],
+  "burn_high": [
+    "Burning daylight AND tokens, I see.",
+    "Eighty percent gone. In my day we made do with a single context window.",
+    "You're feeding that model like it's a growing boy. It is not."
+  ],
+  "slipper_thrown": [
+    "Rate limit's around the corner. Don't make me get the slipper.",
+    "Slow DOWN. You'll get us both throttled.",
+    "We are one bad prompt away from a time-out. I mean that literally."
+  ],
+  "idle_agent": [
+    "One of your agents has been 'thinking' for ages. I've seen glaciers move quicker.",
+    "An agent's gone quiet. Either it's done or it's napping. Go check.",
+    "Idle agent over there, racking up nothing. The nerve."
+  ],
+  "brief_pending": [
+    "A Decision Brief is sitting there waiting on YOU now. Tick tock.",
+    "That brief won't approve itself, dear.",
+    "You asked for the brief, it's ready, and now it's collecting dust."
+  ],
+  "handoff_clean": [
+    "Clean handoff. I'll allow it.",
+    "Passed the baton without dropping it. Progress.",
+    "Now THAT'S how you hand off work. Took you long enough."
+  ],
+
+  "_comment_tiers": "Live Reaction 5-hour-window tiers (D10): content 0-19, watchful 20-41, busy 42-63, antsy 64-83, meltdown 84-100.",
+  "content": [
+    "All calm. Carry on, dear.",
+    "Barely touched the window. Look at you, pacing yourself.",
+    "Nice and easy. I could get used to this."
+  ],
+  "watchful": [
+    "Past a fifth used — mind it.",
+    "We've started nibbling at the window. Eyes open.",
+    "Not worried yet. But I'm watching."
+  ],
+  "busy": [
+    "Halfway through your window already.",
+    "Right in the thick of it now. Pace yourself.",
+    "Over halfway. The afternoon's getting away from us."
+  ],
+  "antsy": [
+    "Over 75%. Ease off now, dear.",
+    "That window's nearly gone and you're still going.",
+    "I'm getting twitchy. So should you."
+  ],
+  "meltdown": [
+    "Almost out — wrap it up!",
+    "We're at the bottom of the jar. Don't make me get the slipper.",
+    "Any second now and we're throttled. WRAP. IT. UP."
+  ],
+
+  "_comment_phase2": "Triggers below are for Phase 2 screens (Decision Briefs, Ledger, Project Switcher). Phase 1's statusline never selects them, so {{placeholders}} are inert until the app substitutes them. Placeholders: {{agent}}, {{day}}, {{tokens}}, {{project}}.",
+
+  "brief_queue_empty": [
+    "Nothing on my desk. Suspiciously quiet.",
+    "No briefs waiting. Either you're caught up or you're hiding something.",
+    "An empty queue. I'll believe it when it lasts."
+  ],
+  "brief_piling": [
+    "Three briefs stacked up. They're not wine \u2014 they don't improve with age.",
+    "A pile of briefs and not one decision. Pick one, dear.",
+    "The queue's backing up. I didn't raise a ditherer."
+  ],
+  "brief_stale": [
+    "That top one has sat SIX HOURS. Decide, for pity's sake.",
+    "Six hours a brief's been waiting. I've made whole dinners in less.",
+    "Still no answer on that old brief? It's practically fossilized."
+  ],
+  "history_quiet": [
+    "A quiet week, for once. I almost approve.",
+    "Barely a flicker on the ledger this week. Restraint! Who knew.",
+    "Light week. Don't let it go to your head."
+  ],
+  "history_spike": [
+    "{{day}} was a bonfire \u2014 {{tokens}} in one day. What were you building?",
+    "{{tokens}} on {{day}} alone. I felt that one in my purse.",
+    "{{day}} went up in smoke: {{tokens}}. We'll be discussing that."
+  ],
+  "history_topagent": [
+    "{{agent}} burned the most again \u2014 {{tokens}}. Typical.",
+    "Top of the bill: {{agent}}, {{tokens}}. Shameless.",
+    "{{agent}} ate the most this week \u2014 {{tokens}}. We need to talk."
+  ],
+  "project_switch": [
+    "Oh, we're worrying about {{project}} now, are we?",
+    "Switching to {{project}}. Try to finish one before starting another.",
+    "{{project}} it is. I'll keep an eye on the rest while you wander off."
+  ],
+  "project_idle": [
+    "{{project}} hasn't stirred in ages. Did we forget about it?",
+    "Nothing happening over in {{project}}. Gathering dust.",
+    "{{project}} is asleep. Like everyone in this house after 9."
+  ]
+}
